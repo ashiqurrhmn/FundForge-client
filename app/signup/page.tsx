@@ -4,8 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Flame, AlertCircle } from "lucide-react";
+import { Flame, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { authClient } from "../lib/auth-client";
+import toast from "react-hot-toast";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function SignUpPage() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -70,10 +72,12 @@ export default function SignUpPage() {
 
     if (error) {
       setErrors({ ...errors, email: error.message || "An error occurred during signup" });
+      toast.error(error.message || "Signup Failed");
       setIsSubmitting(false);
       return;
     }
     
+    toast.success("Your account has been successfully created.");
     setIsSubmitting(false);
     router.push("/dashboard");
   };
@@ -81,6 +85,7 @@ export default function SignUpPage() {
   const handleGoogleLogin = () => {
     setIsSubmitting(true);
     setTimeout(() => {
+      toast.success("Logged in via Google successfully.");
       setIsSubmitting(false);
       router.push("/dashboard");
     }, 1000);
@@ -95,7 +100,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden bg-neutral-50 dark:bg-neutral-950 px-4 transition-colors">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-neutral-50 dark:bg-neutral-950 px-4 transition-colors">
       {/* Animated Background */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {/* We use large blurred circles rotating slowly to create a dynamic, modern background */}
@@ -104,62 +109,64 @@ export default function SignUpPage() {
       </div>
 
       {/* Form Container */}
-      <div className="relative z-10 w-full max-w-md p-8 sm:p-10 bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-neutral-200 dark:border-white/10 rounded-3xl shadow-2xl my-8">
-        <div className="text-center mb-8">
+      <div className="relative z-10 w-full max-w-md p-6 sm:p-8 bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-neutral-200 dark:border-white/10 rounded-3xl shadow-2xl my-4">
+        <div className="text-center mb-6">
           <Link href="/" className="inline-flex items-center justify-center mb-2 hover:opacity-80 transition-opacity">
             <Image 
-              src="/assets/logo-light.png" 
+              src="/assets/nav-logo-light.png" 
               alt="FundForge Logo" 
               width={180} 
               height={50} 
-              className="h-10 w-auto object-contain dark:hidden" 
+              className="h-6 w-auto object-contain dark:hidden mb-2" 
               priority
             />
             <Image 
-              src="/assets/logo-dark.png" 
+              src="/assets/nav-logo-dark.png" 
               alt="FundForge Logo" 
               width={180} 
               height={50} 
-              className="h-auto w-auto object-contain hidden dark:block" 
+              className="h-6 w-auto object-contain hidden dark:block mb-2" 
               priority
             />
           </Link>
           <p className="text-neutral-500 dark:text-neutral-400">Create your account to get started</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-          {/* Name */}
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5" htmlFor="name">
-              Full Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              value={formData.name}
-              onChange={handleChange}
-              className={`flex h-12 w-full rounded-xl border ${errors.name ? 'border-red-500/50 focus:ring-red-500' : 'border-neutral-200 dark:border-white/10 focus:ring-emerald-500'} bg-white/50 dark:bg-white/5 px-4 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 transition-all`}
-              placeholder="John Doe"
-            />
-            {errors.name && <p className="mt-1.5 flex items-center gap-1 text-xs text-red-500 dark:text-red-400"><AlertCircle className="w-3 h-3" /> {errors.name}</p>}
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Name */}
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5" htmlFor="name">
+                Full Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                value={formData.name}
+                onChange={handleChange}
+                className={`flex h-11 w-full rounded-xl border ${errors.name ? 'border-red-500/50 focus:ring-red-500' : 'border-neutral-200 dark:border-white/10 focus:ring-emerald-500'} bg-white/50 dark:bg-white/5 px-4 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 transition-all`}
+                placeholder="John Doe"
+              />
+              {errors.name && <p className="mt-1.5 flex items-center gap-1 text-xs text-red-500 dark:text-red-400"><AlertCircle className="w-3 h-3" /> {errors.name}</p>}
+            </div>
 
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5" htmlFor="email">
-              Email Address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`flex h-12 w-full rounded-xl border ${errors.email ? 'border-red-500/50 focus:ring-red-500' : 'border-neutral-200 dark:border-white/10 focus:ring-emerald-500'} bg-white/50 dark:bg-white/5 px-4 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 transition-all`}
-              placeholder="name@example.com"
-            />
-            {errors.email && <p className="mt-1.5 flex items-center gap-1 text-xs text-red-500 dark:text-red-400"><AlertCircle className="w-3 h-3" /> {errors.email}</p>}
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5" htmlFor="email">
+                Email Address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={`flex h-11 w-full rounded-xl border ${errors.email ? 'border-red-500/50 focus:ring-red-500' : 'border-neutral-200 dark:border-white/10 focus:ring-emerald-500'} bg-white/50 dark:bg-white/5 px-4 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 transition-all`}
+                placeholder="name@example.com"
+              />
+              {errors.email && <p className="mt-1.5 flex items-center gap-1 text-xs text-red-500 dark:text-red-400"><AlertCircle className="w-3 h-3" /> {errors.email}</p>}
+            </div>
           </div>
 
           {/* Profile Picture URL */}
@@ -173,7 +180,7 @@ export default function SignUpPage() {
               type="url"
               value={formData.profilePictureUrl}
               onChange={handleChange}
-              className={`flex h-12 w-full rounded-xl border ${errors.profilePictureUrl ? 'border-red-500/50 focus:ring-red-500' : 'border-neutral-200 dark:border-white/10 focus:ring-emerald-500'} bg-white/50 dark:bg-white/5 px-4 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 transition-all`}
+              className={`flex h-11 w-full rounded-xl border ${errors.profilePictureUrl ? 'border-red-500/50 focus:ring-red-500' : 'border-neutral-200 dark:border-white/10 focus:ring-emerald-500'} bg-white/50 dark:bg-white/5 px-4 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 transition-all`}
               placeholder="https://example.com/avatar.jpg"
             />
             {errors.profilePictureUrl && <p className="mt-1.5 flex items-center gap-1 text-xs text-red-500 dark:text-red-400"><AlertCircle className="w-3 h-3" /> {errors.profilePictureUrl}</p>}
@@ -184,15 +191,24 @@ export default function SignUpPage() {
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5" htmlFor="password">
               Password
             </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              className={`flex h-12 w-full rounded-xl border ${errors.password ? 'border-red-500/50 focus:ring-red-500' : 'border-neutral-200 dark:border-white/10 focus:ring-emerald-500'} bg-white/50 dark:bg-white/5 px-4 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 transition-all`}
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleChange}
+                className={`flex h-11 w-full rounded-xl border ${errors.password ? 'border-red-500/50 focus:ring-red-500' : 'border-neutral-200 dark:border-white/10 focus:ring-emerald-500'} bg-white/50 dark:bg-white/5 px-4 py-2 pr-12 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 transition-all`}
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 focus:outline-none"
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
+            </div>
             {errors.password ? (
                <p className="mt-1.5 flex items-start gap-1 text-xs text-red-500 dark:text-red-400">
                  <AlertCircle className="w-3 h-3 mt-0.5 shrink-0" /> 
@@ -214,7 +230,7 @@ export default function SignUpPage() {
                  name="role"
                  value={formData.role}
                  onChange={handleChange}
-                 className="flex h-12 w-full appearance-none rounded-xl border border-neutral-200 dark:border-white/10 bg-white/50 dark:bg-white/5 px-4 py-2 text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all cursor-pointer"
+                 className="flex h-11 w-full appearance-none rounded-xl border border-neutral-200 dark:border-white/10 bg-white/50 dark:bg-white/5 px-4 py-2 text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all cursor-pointer"
                >
                  <option value="supporter" className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white">Supporter</option>
                  <option value="creator" className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white">Creator</option>
@@ -229,7 +245,7 @@ export default function SignUpPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full mt-2 flex items-center justify-center h-12 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-[0_0_20px_rgba(5,150,105,0.3)]"
+            className="w-full mt-2 flex items-center justify-center h-11 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-[0_0_20px_rgba(5,150,105,0.3)]"
           >
             {isSubmitting ? (
               <span className="flex items-center gap-2">
@@ -240,7 +256,7 @@ export default function SignUpPage() {
           </button>
         </form>
 
-        <div className="my-6 flex items-center">
+        <div className="my-5 flex items-center">
           <div className="flex-1 border-t border-neutral-200 dark:border-white/10"></div>
           <span className="px-3 text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider font-medium">Or continue with</span>
           <div className="flex-1 border-t border-neutral-200 dark:border-white/10"></div>
@@ -249,7 +265,7 @@ export default function SignUpPage() {
         <button
           onClick={handleGoogleLogin}
           disabled={isSubmitting}
-          className="w-full flex items-center justify-center gap-3 h-12 rounded-xl border border-neutral-200 dark:border-white/10 bg-white/50 dark:bg-white/5 text-neutral-900 dark:text-white font-medium hover:bg-neutral-50 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full flex items-center justify-center gap-3 h-11 rounded-xl border border-neutral-200 dark:border-white/10 bg-white/50 dark:bg-white/5 text-neutral-900 dark:text-white font-medium hover:bg-neutral-50 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
@@ -260,7 +276,7 @@ export default function SignUpPage() {
           Google
         </button>
           
-        <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 pt-6">
+        <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 pt-5">
           Already have an account?{" "}
           <Link href="/login" className="font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors">
             Login

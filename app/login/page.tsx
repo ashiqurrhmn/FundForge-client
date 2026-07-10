@@ -4,8 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { authClient } from "../lib/auth-client";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function LoginPage() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -46,10 +48,12 @@ export default function LoginPage() {
 
     if (error) {
       setErrors({ ...errors, email: error.message || "Invalid credentials" });
+      toast.error(error.message || "Login Failed");
       setIsSubmitting(false);
       return;
     }
 
+    toast.success("Successfully logged in.");
     setIsSubmitting(false);
     router.push("/dashboard");
   };
@@ -63,6 +67,10 @@ export default function LoginPage() {
     
     if (error) {
       setErrors({ ...errors, email: error.message || "Google sign-in failed" });
+      toast.error(error.message || "Google sign-in failed");
+    } else {
+      // Actually better-auth handles the redirect to Google, so we might not hit this block immediately, but just in case:
+      toast.success("Redirecting to Google...");
     }
     
     setIsSubmitting(false);
@@ -76,7 +84,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden bg-neutral-50 dark:bg-neutral-950 px-4 transition-colors">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-neutral-50 dark:bg-neutral-950 px-4 transition-colors">
       {/* Animated Background */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-emerald-300/30 dark:bg-emerald-600/20 mix-blend-multiply dark:mix-blend-screen filter blur-[120px] animate-[spin_40s_linear_infinite]" />
@@ -88,19 +96,19 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center justify-center mb-2 hover:opacity-80 transition-opacity">
             <Image 
-              src="/assets/logo-light.png" 
+              src="/assets/nav-logo-light.png" 
               alt="FundForge Logo" 
               width={180} 
               height={50} 
-              className="h-10 w-auto object-contain dark:hidden" 
+              className="h-6 w-auto object-contain dark:hidden mb-2" 
               priority
             />
             <Image 
-              src="/assets/logo-dark.png" 
+              src="/assets/nav-logo-dark.png" 
               alt="FundForge Logo" 
               width={180} 
               height={50} 
-              className="h-auto w-auto object-contain hidden dark:block" 
+              className="h-6 w-auto object-contain hidden dark:block mb-2" 
               priority
             />
           </Link>
@@ -135,15 +143,24 @@ export default function LoginPage() {
                 Forgot password?
               </a>
             </div>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              className={`flex h-12 w-full rounded-xl border ${errors.password ? 'border-red-500/50 focus:ring-red-500' : 'border-neutral-200 dark:border-white/10 focus:ring-emerald-500'} bg-white/50 dark:bg-white/5 px-4 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 transition-all`}
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleChange}
+                className={`flex h-12 w-full rounded-xl border ${errors.password ? 'border-red-500/50 focus:ring-red-500' : 'border-neutral-200 dark:border-white/10 focus:ring-emerald-500'} bg-white/50 dark:bg-white/5 px-4 py-2 pr-12 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 transition-all`}
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 focus:outline-none"
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
+            </div>
             {errors.password && (
                <p className="mt-1.5 flex items-start gap-1 text-xs text-red-500 dark:text-red-400">
                  <AlertCircle className="w-3 h-3 mt-0.5 shrink-0" /> 
