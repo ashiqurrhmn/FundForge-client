@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AlertCircle } from "lucide-react";
+import { authClient } from "../lib/auth-client";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,12 +29,6 @@ export default function LoginPage() {
       newErrors.password = "Password is required";
     }
 
-    // Mock incorrect credentials check for demonstration
-    if (formData.email === "wrong@example.com") {
-      newErrors.email = "Incorrect email or password";
-      newErrors.password = "Incorrect email or password";
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -43,19 +38,34 @@ export default function LoginPage() {
     if (!validate()) return;
 
     setIsSubmitting(true);
-    // Mock API call
-    setTimeout(() => {
+    
+    const { data, error } = await authClient.signIn.email({
+      email: formData.email,
+      password: formData.password,
+    });
+
+    if (error) {
+      setErrors({ ...errors, email: error.message || "Invalid credentials" });
       setIsSubmitting(false);
-      router.push("/dashboard");
-    }, 1500);
+      return;
+    }
+
+    setIsSubmitting(false);
+    router.push("/dashboard");
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      router.push("/dashboard");
-    }, 1000);
+    const { data, error } = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard"
+    });
+    
+    if (error) {
+      setErrors({ ...errors, email: error.message || "Google sign-in failed" });
+    }
+    
+    setIsSubmitting(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
