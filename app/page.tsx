@@ -9,12 +9,14 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const SLIDES = [
   {
-    image: "/assets/hero-image-3.png",
+    image: "/assets/hero-10.png",
+    imageWrapperClassName: "w-[95%] md:w-[50%]",
     number: "01",
     subtitle: "THE MISSION",
     tagline: "THE STANDARD",
     headline: "FUNDFORGE",
-    mission: "WE EMPOWER CREATORS WITH THE TOOLS, COMMUNITY, AND FUNDING THEY NEED TO BRING BOLD IDEAS TO LIFE.",
+    mission:
+      "WE EMPOWER CREATORS WITH THE TOOLS, COMMUNITY, AND FUNDING THEY NEED TO BRING BOLD IDEAS TO LIFE.",
     quote: "DREAM BIG, FUND BIGGER. YOUR VISION STARTS HERE.",
     cta: { text: "EXPLORE CAMPAIGNS", href: "/explore" },
     metrics: [
@@ -25,12 +27,14 @@ const SLIDES = [
     bottomTag: "NO LIMITS.\nONLY IMPACT.",
   },
   {
-    image: "/assets/hero-image-2.png",
+    image: "/assets/hero-11.png",
+    imageWrapperClassName: "w-[95%] md:w-[50%]",
     number: "02",
     subtitle: "THE VISION",
     tagline: "THE MOVEMENT",
     headline: "CROWDFUND",
-    mission: "DISCOVER INSPIRING CAMPAIGNS FROM CREATORS AROUND THE WORLD. FUND THE IDEAS YOU BELIEVE IN.",
+    mission:
+      "DISCOVER INSPIRING CAMPAIGNS FROM CREATORS AROUND THE WORLD. FUND THE IDEAS YOU BELIEVE IN.",
     quote: "EVERY GREAT PROJECT STARTS WITH ONE SUPPORTER. BE THAT ONE.",
     cta: { text: "START A CAMPAIGN", href: "/create" },
     metrics: [
@@ -39,6 +43,24 @@ const SLIDES = [
       { label: "COUNTRIES", value: "45+" },
     ],
     bottomTag: "NO SHORTCUTS.\nONLY GROWTH.",
+  },
+  {
+    image: "/assets/hero-13.png",
+    imageWrapperClassName: "w-[85%] md:w-[42%]",
+    number: "03",
+    subtitle: "THE IMPACT",
+    tagline: "THE FUTURE",
+    headline: "INNOVATE",
+    mission:
+      "JOIN A GLOBAL COMMUNITY OF BACKERS AND CREATORS BUILDING THE NEXT GENERATION OF PRODUCTS.",
+    quote: "TOGETHER, WE CAN MAKE THE IMPOSSIBLE, POSSIBLE.",
+    cta: { text: "JOIN NOW", href: "/signup" },
+    metrics: [
+      { label: "BACKERS", value: "100K+" },
+      { label: "RAISED", value: "$10M+" },
+      { label: "SUCCESS", value: "95%" },
+    ],
+    bottomTag: "NO EXCUSES.\nONLY RESULTS.",
   },
 ];
 
@@ -60,61 +82,61 @@ export default function Home() {
 
   return (
     <PageTransition className="flex flex-col flex-1 bg-white dark:bg-black font-sans overflow-hidden min-h-[calc(100vh-64px)]">
-      
-      <div className="relative w-full flex-1 bg-white dark:bg-[#0a0a0a] overflow-hidden">
+      <div className="relative w-full flex-1 bg-white dark:bg-[#0a0a0a] overflow-hidden flex flex-col items-center">
+        {/* Giant Watermark Text Behind Everything */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`watermark-${currentSlide}`}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-x-0 top-[12%] md:top-[15%] flex justify-center pointer-events-none select-none z-[1]"
+          >
+            <h2 className="text-[12vw] md:text-[14vw] font-black text-transparent bg-clip-text bg-gradient-to-b from-neutral-300 to-white dark:from-white/[0.04] dark:to-white/[0.04] tracking-[0.05em] leading-none whitespace-nowrap uppercase">
+              {slide.headline}
+            </h2>
+          </motion.div>
+        </AnimatePresence>
 
-          {/* Giant Watermark Text Behind Everything */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`watermark-${currentSlide}`}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.8 }}
-              className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-[1]"
-            >
-              <h2 className="text-[12vw] md:text-[14vw] font-black text-transparent bg-clip-text bg-gradient-to-b from-neutral-300 to-white dark:from-white/[0.04] dark:to-white/[0.04] tracking-[0.05em] leading-none whitespace-nowrap uppercase">
-                {slide.headline}
-              </h2>
-            </motion.div>
-          </AnimatePresence>
+        {/* Center Image */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`image-${currentSlide}`}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
+            transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
+            className="absolute inset-0 z-[2] flex items-end justify-center"
+          >
+            <div className={`relative h-[100%] ${slide.imageWrapperClassName}`}>
+              <Image
+                src={slide.image}
+                alt="Hero"
+                fill
+                className="object-contain object-center md:object-bottom drop-shadow-[0_30px_30px_rgba(255,255,255,1)] dark:drop-shadow-[0_30px_30px_rgba(0,0,0,1)]"
+                priority
+              />
+            </div>
+          </motion.div>
+        </AnimatePresence>
 
-          {/* Center Image */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`image-${currentSlide}`}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.02 }}
-              transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-              className="absolute inset-0 z-[2] flex items-end justify-center"
-            >
-              <div className="relative w-[65%] md:w-[50%] h-[100%]">
-                <Image
-                  src={slide.image}
-                  alt="Hero"
-                  fill
-                  className="object-contain object-bottom"
-                  priority
-                />
-              </div>
-            </motion.div>
-          </AnimatePresence>
+        {/* Gradient overlays for edges */}
+        <div className="absolute inset-y-0 left-0 w-[35%] bg-gradient-to-r from-white via-white/70 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/70 to-transparent z-[3] pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-[35%] bg-gradient-to-l from-white via-white/70 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/70 to-transparent z-[3] pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[60vh] md:h-32 bg-gradient-to-t from-white dark:from-[#0a0a0a] via-white/80 dark:via-[#0a0a0a]/80 md:via-transparent to-transparent z-[3] pointer-events-none" />
 
-          {/* Gradient overlays for edges */}
-          <div className="absolute inset-y-0 left-0 w-[35%] bg-gradient-to-r from-white via-white/70 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/70 to-transparent z-[3] pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-[35%] bg-gradient-to-l from-white via-white/70 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/70 to-transparent z-[3] pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white dark:from-[#0a0a0a] to-transparent z-[3] pointer-events-none" />
+        {/* Vertical Side Text (Far Left) */}
+        <div className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-[5] hidden 2xl:block">
+          <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold uppercase tracking-[0.3em] [writing-mode:vertical-lr] rotate-180">
+            FUNDFORGE
+          </p>
+        </div>
 
-          {/* Vertical Side Text (Far Left) */}
-          <div className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-[5] hidden lg:block">
-            <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold uppercase tracking-[0.3em] [writing-mode:vertical-lr] rotate-180">
-              FUNDFORGE
-            </p>
-          </div>
-
+        {/* container wrapper for text content */}
+        <div className="absolute inset-0 w-full container mx-auto pointer-events-none z-[10]">
           {/* LEFT CONTENT */}
-          <div className="absolute left-6 md:left-16 lg:left-24 top-1/2 -translate-y-1/2 z-[5] max-w-[280px] md:max-w-xs">
+          <div className="absolute left-4 right-4 md:right-auto bottom-24 top-auto md:bottom-auto md:top-[60%] md:-translate-y-1/2 z-[5] md:max-w-xs pointer-events-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`left-${currentSlide}`}
@@ -149,7 +171,7 @@ export default function Home() {
           </div>
 
           {/* RIGHT CONTENT */}
-          <div className="absolute right-6 md:right-16 lg:right-24 top-1/2 -translate-y-1/2 z-[5] text-right hidden md:block">
+          <div className="absolute right-4 top-[60%] -translate-y-1/2 z-[5] text-right hidden md:block pointer-events-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`right-${currentSlide}`}
@@ -173,7 +195,10 @@ export default function Home() {
                   </p>
                   <div className="space-y-3">
                     {slide.metrics.map((metric) => (
-                      <div key={metric.label} className="flex items-center justify-end gap-8">
+                      <div
+                        key={metric.label}
+                        className="flex items-center justify-end gap-8"
+                      >
                         <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
                           {metric.label}
                         </span>
@@ -194,7 +219,7 @@ export default function Home() {
           </div>
 
           {/* Bottom Slide Indicators */}
-          <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-[5] flex items-center gap-3">
+          <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-[5] flex items-center gap-3 pointer-events-auto">
             {SLIDES.map((_, index) => (
               <button
                 key={index}
@@ -208,14 +233,17 @@ export default function Home() {
                     className="absolute inset-0 bg-emerald-500 rounded-full origin-left"
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
-                    transition={{ duration: SLIDE_DURATION / 1000, ease: "linear" }}
+                    transition={{
+                      duration: SLIDE_DURATION / 1000,
+                      ease: "linear",
+                    }}
                   />
                 )}
               </button>
             ))}
           </div>
-
         </div>
+      </div>
     </PageTransition>
   );
 }
