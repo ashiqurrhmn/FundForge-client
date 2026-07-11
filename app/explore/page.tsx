@@ -165,9 +165,13 @@ function ExploreContent() {
 
         {/* Bento Grid */}
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-32 text-neutral-500">
-            <Loader2 className="w-10 h-10 animate-spin text-emerald-500 mb-4" />
-            <p className="font-medium">Loading amazing campaigns...</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 auto-rows-[250px] md:auto-rows-[220px]">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div
+                key={i}
+                className={`rounded-3xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 animate-pulse ${getGridClasses(i)}`}
+              />
+            ))}
           </div>
         ) : filteredCampaigns.length === 0 ? (
           <div className="text-center py-32 bg-neutral-50 dark:bg-neutral-900/50 rounded-3xl border border-neutral-200 dark:border-neutral-800">
@@ -271,8 +275,16 @@ function ExploreContent() {
 export default function ExplorePage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-white dark:bg-[#0a0a0a] pt-5 pb-20 flex justify-center py-32">
-        <Loader2 className="w-10 h-10 animate-spin text-emerald-500" />
+      <div className="min-h-screen bg-white dark:bg-[#0a0a0a] pt-5 pb-20">
+        <div className="max-w-7xl mx-auto px-6 md:px-8 animate-pulse">
+           <div className="w-64 h-12 bg-neutral-200 dark:bg-neutral-800 rounded-xl mb-8 mt-4"></div>
+           <div className="w-full h-20 bg-neutral-200 dark:bg-neutral-800 rounded-3xl mb-10"></div>
+           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 auto-rows-[250px] md:auto-rows-[220px]">
+             {Array.from({ length: 10 }).map((_, i) => (
+               <div key={i} className={`rounded-3xl bg-neutral-200 dark:bg-neutral-800 ${getGridClasses(i)}`} />
+             ))}
+           </div>
+        </div>
       </div>
     }>
       <ExploreContent />

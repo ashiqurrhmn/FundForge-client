@@ -71,8 +71,57 @@ export default function CampaignDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0a0a0a]">
-        <Loader2 className="w-12 h-12 animate-spin text-emerald-500" />
+      <div className="min-h-screen bg-white dark:bg-[#0a0a0a] pb-24 animate-pulse">
+        {/* Hero Section Skeleton */}
+        <div className="relative w-full h-[50vh] md:h-[60vh] bg-neutral-200 dark:bg-neutral-900">
+          <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 max-w-7xl mx-auto">
+            <div className="w-24 h-6 bg-neutral-300 dark:bg-neutral-800 rounded-full mb-6"></div>
+            <div className="w-3/4 h-12 md:h-16 lg:h-20 bg-neutral-300 dark:bg-neutral-800 rounded-2xl mb-4"></div>
+            <div className="w-1/2 h-12 md:h-16 lg:h-20 bg-neutral-300 dark:bg-neutral-800 rounded-2xl"></div>
+          </div>
+        </div>
+
+        {/* Main Content Skeleton */}
+        <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col lg:flex-row gap-12">
+          {/* Left Column */}
+          <div className="flex-1 space-y-4">
+            <div className="w-full h-4 bg-neutral-200 dark:bg-neutral-900 rounded-md"></div>
+            <div className="w-full h-4 bg-neutral-200 dark:bg-neutral-900 rounded-md"></div>
+            <div className="w-3/4 h-4 bg-neutral-200 dark:bg-neutral-900 rounded-md"></div>
+            <div className="w-full h-4 bg-neutral-200 dark:bg-neutral-900 rounded-md mt-8"></div>
+            <div className="w-5/6 h-4 bg-neutral-200 dark:bg-neutral-900 rounded-md"></div>
+            
+            <div className="w-48 h-8 bg-neutral-200 dark:bg-neutral-900 rounded-md mt-12 mb-6"></div>
+            <div className="flex items-center gap-6 p-6 md:p-8 bg-neutral-50 dark:bg-neutral-900/50 rounded-3xl border border-neutral-200 dark:border-neutral-800">
+              <div className="w-20 h-20 rounded-full bg-neutral-200 dark:bg-neutral-800 shrink-0"></div>
+              <div className="space-y-3 w-full">
+                <div className="w-1/3 h-6 bg-neutral-200 dark:bg-neutral-800 rounded-md"></div>
+                <div className="w-1/2 h-4 bg-neutral-200 dark:bg-neutral-800 rounded-md"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Sidebar */}
+          <div className="w-full lg:w-[400px] shrink-0">
+            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-3xl p-8 shadow-2xl">
+              <div className="w-32 h-4 bg-neutral-200 dark:bg-neutral-800 rounded-md mb-3"></div>
+              <div className="w-48 h-12 bg-neutral-200 dark:bg-neutral-800 rounded-xl mb-8"></div>
+              
+              <div className="w-full h-4 bg-neutral-200 dark:bg-neutral-800 rounded-full mb-4"></div>
+              <div className="flex justify-between mb-10">
+                <div className="w-16 h-4 bg-neutral-200 dark:bg-neutral-800 rounded-md"></div>
+                <div className="w-16 h-4 bg-neutral-200 dark:bg-neutral-800 rounded-md"></div>
+              </div>
+              
+              <div className="space-y-4 mb-10">
+                <div className="w-full h-20 bg-neutral-200 dark:bg-neutral-800 rounded-2xl"></div>
+                <div className="w-full h-20 bg-neutral-200 dark:bg-neutral-800 rounded-2xl"></div>
+              </div>
+              
+              <div className="w-full h-16 bg-neutral-200 dark:bg-neutral-800 rounded-2xl"></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
