@@ -33,6 +33,9 @@ export default function AdminCampaignsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const filteredAndSortedCampaigns = useMemo(() => {
     let result = [...campaigns];
@@ -65,6 +68,16 @@ export default function AdminCampaignsPage() {
 
     return result;
   }, [campaigns, searchQuery, statusFilter, sortBy]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, statusFilter, sortBy]);
+
+  const totalPages = Math.ceil(filteredAndSortedCampaigns.length / itemsPerPage);
+  const paginatedCampaigns = filteredAndSortedCampaigns.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   useEffect(() => {
     if (!isPending) {
@@ -203,7 +216,7 @@ export default function AdminCampaignsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                {filteredAndSortedCampaigns.map((campaign) => (
+                {paginatedCampaigns.map((campaign) => (
                   <tr key={campaign._id} className="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors">
                     <td className="px-6 py-4 font-medium text-neutral-900 dark:text-white max-w-[200px] truncate" title={campaign.campaign_title}>
                       {campaign.campaign_title}
@@ -260,6 +273,30 @@ export default function AdminCampaignsPage() {
             </table>
           )}
         </div>
+
+        {totalPages > 1 && (
+          <div className="p-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900 flex items-center justify-between">
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              Showing <span className="font-medium text-neutral-900 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-medium text-neutral-900 dark:text-white">{Math.min(currentPage * itemsPerPage, filteredAndSortedCampaigns.length)}</span> of <span className="font-medium text-neutral-900 dark:text-white">{filteredAndSortedCampaigns.length}</span> campaigns
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1.5 text-sm font-medium rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </motion.div>
     </div>
   );
