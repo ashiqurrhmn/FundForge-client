@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { DollarSign, Users, Eye, PlusCircle, ArrowRight, Clock, Star, TrendingUp, Settings, EyeOff, Target, Edit2, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { ManageProfileModal } from "./manage-profile-modal";
 
 // Mock Data
 const MOCK_METRICS = {
@@ -49,6 +51,8 @@ const RECENT_BACKERS = [
 ];
 
 export function CreatorDashboard({ user }: { user: any }) {
+  const [isManageProfileOpen, setIsManageProfileOpen] = useState(false);
+
   return (
     <div className="p-6 md:p-8 w-full">
       
@@ -60,10 +64,19 @@ export function CreatorDashboard({ user }: { user: any }) {
           </h1>
           <p className="text-sm text-neutral-400 font-medium">Home / <span className="text-emerald-500 dark:text-[#009966]">Overview</span></p>
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl font-medium text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 shadow-sm transition-colors self-start sm:self-auto">
+        <button 
+          onClick={() => setIsManageProfileOpen(true)}
+          className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl font-medium text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 shadow-sm transition-colors self-start sm:self-auto"
+        >
           <Edit2 className="w-4 h-4 text-emerald-500 dark:text-[#009966]" /> Manage Profile
         </button>
       </div>
+
+      <ManageProfileModal 
+        isOpen={isManageProfileOpen} 
+        onClose={() => setIsManageProfileOpen(false)} 
+        user={user} 
+      />
 
       {/* 2. Top Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">

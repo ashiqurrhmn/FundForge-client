@@ -32,16 +32,30 @@ export const auth = betterAuth({
         required: true,
         defaultValue: "supporter",
       },
+      credits: {
+        type: "number",
+        required: false,
+        defaultValue: 0,
+      }
     },
   },
   databaseHooks: {
     user: {
       create: {
         before: async (user) => {
+          const role = user.role || "supporter";
+          let initialCredits = 0;
+          if (role === "supporter") {
+            initialCredits = 50;
+          } else if (role === "creator") {
+            initialCredits = 20;
+          }
+
           return {
             data: {
               ...user,
-              emailVerified: true
+              emailVerified: true,
+              credits: initialCredits,
             }
           }
         }

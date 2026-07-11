@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Edit2, TrendingUp, TrendingDown, Plus, Heart, Star, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { ManageProfileModal } from "./manage-profile-modal";
 
 // Mock Data adapted for the new layout
 const MOCK_METRICS = {
@@ -59,6 +61,8 @@ const MOST_SELLING = [
 ];
 
 export function SupporterDashboard({ user }: { user: any }) {
+  const [isManageProfileOpen, setIsManageProfileOpen] = useState(false);
+
   return (
     <div className="p-6 md:p-8 w-full">
       
@@ -70,10 +74,19 @@ export function SupporterDashboard({ user }: { user: any }) {
           </h1>
           <p className="text-sm text-neutral-400 font-medium">Home / <span className="text-emerald-500">Dashboard</span></p>
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl font-medium text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 shadow-sm transition-colors self-start sm:self-auto">
+        <button 
+          onClick={() => setIsManageProfileOpen(true)}
+          className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl font-medium text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 shadow-sm transition-colors self-start sm:self-auto"
+        >
           <Edit2 className="w-4 h-4 text-emerald-500" /> Manage profile
         </button>
       </div>
+
+      <ManageProfileModal 
+        isOpen={isManageProfileOpen} 
+        onClose={() => setIsManageProfileOpen(false)} 
+        user={user} 
+      />
 
       {/* 2. Top Metrics Card */}
       <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 md:p-8 shadow-[0_2px_20px_rgb(0,0,0,0.04)] mb-8 flex flex-col lg:flex-row items-center justify-between gap-8">
