@@ -110,7 +110,7 @@ export function SupporterDashboard({ user }: { user: any }) {
           </div>
         </div>
 
-        <button className="w-full lg:w-auto bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3.5 rounded-2xl font-bold shadow-lg shadow-emerald-500/30 transition-all flex items-center justify-center gap-2">
+        <button className="w-full lg:w-auto bg-emerald-500 dark:bg-[#009966] hover:bg-emerald-600 dark:hover:bg-[#008f5d] text-white px-8 py-3.5 rounded-2xl font-bold shadow-lg shadow-emerald-500/30 dark:shadow-[#009966]/30 transition-all flex items-center justify-center gap-2">
           Add Funds <Plus className="w-4 h-4" />
         </button>
 
@@ -192,7 +192,7 @@ export function SupporterDashboard({ user }: { user: any }) {
            </div>
 
            {/* Solid Colored Card (Order Details equivalent) */}
-           <div className="bg-emerald-500 rounded-3xl p-6 shadow-lg shadow-emerald-500/20 text-white h-auto relative overflow-hidden">
+           <div className="bg-emerald-500 dark:bg-[#009966] rounded-3xl p-6 shadow-lg shadow-emerald-500/20 dark:shadow-[#009966]/20 text-white h-auto relative overflow-hidden">
              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
              <h3 className="text-base font-bold mb-4 relative z-10">Impact Summary</h3>
              <ul className="space-y-3 text-sm font-medium relative z-10 text-emerald-50">
@@ -201,7 +201,7 @@ export function SupporterDashboard({ user }: { user: any }) {
                <li className="flex justify-between"><span>Education</span> <span>$420</span></li>
                <li className="flex justify-between"><span>Community</span> <span>$310</span></li>
              </ul>
-             <button className="mt-6 w-full py-2.5 bg-white text-emerald-600 rounded-xl font-bold text-sm hover:bg-emerald-50 transition-colors relative z-10">
+             <button className="mt-6 w-full py-2.5 bg-white text-emerald-600 dark:text-[#009966] rounded-xl font-bold text-sm hover:bg-emerald-50 dark:hover:bg-white/90 transition-colors relative z-10">
                View Full Report
              </button>
            </div>

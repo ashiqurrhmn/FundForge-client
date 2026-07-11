@@ -15,6 +15,12 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
+  account: {
+    accountLinking: {
+      enabled: true,
+      trustedProviders: ["google"]
+    }
+  },
   database: mongodbAdapter(db, {
     // Optional: if you don't provide a client, database transactions won't be enabled.
     client,
@@ -28,5 +34,18 @@ export const auth = betterAuth({
       },
     },
   },
-  
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          return {
+            data: {
+              ...user,
+              emailVerified: true
+            }
+          }
+        }
+      }
+    }
+  }
 });
