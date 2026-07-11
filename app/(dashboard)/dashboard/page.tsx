@@ -14,7 +14,9 @@ export default function DashboardRedirector() {
         router.push("/login");
       } else {
         const userRole = (session.user as any).role || "supporter";
-        if (userRole === "creator") {
+        if (userRole === "admin") {
+          router.push("/admin/dashboard");
+        } else if (userRole === "creator") {
           router.push("/creator/dashboard");
         } else {
           router.push("/supporter/dashboard");

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Compass, Heart, CreditCard, ReceiptText, LogOut, X, PlusCircle, Layers, Landmark } from "lucide-react";
+import { Home, Compass, Heart, CreditCard, ReceiptText, LogOut, X, PlusCircle, Layers, Landmark, ShieldCheck, Users, PieChart } from "lucide-react";
 import { authClient, useSession } from "@/app/lib/auth-client";
 import { useRouter } from "next/navigation";
 
@@ -24,6 +24,14 @@ export const CREATOR_SIDEBAR_ITEMS = [
   { name: "Payment History", href: "/creator/dashboard/payments", icon: ReceiptText },
 ];
 
+export const ADMIN_SIDEBAR_ITEMS = [
+  { name: "Home", href: "/admin/dashboard", icon: Home },
+  { name: "Manage Users", href: "/admin/dashboard/users", icon: Users },
+  { name: "Manage Campaigns", href: "/admin/dashboard/campaigns", icon: ShieldCheck },
+  { name: "Withdrawal Requests", href: "/admin/dashboard/withdrawals", icon: Landmark },
+  { name: "Reports", href: "/admin/dashboard/reports", icon: PieChart },
+];
+
 interface DashboardSidebarProps {
   isMobileMenuOpen: boolean;
   setIsMobileMenuOpen: (open: boolean) => void;
@@ -35,7 +43,7 @@ export function DashboardSidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Dash
   const { data: session } = useSession();
   
   const role = (session?.user as any)?.role || "supporter";
-  const SIDEBAR_ITEMS = role === "creator" ? CREATOR_SIDEBAR_ITEMS : SUPPORTER_SIDEBAR_ITEMS;
+  const SIDEBAR_ITEMS = role === "admin" ? ADMIN_SIDEBAR_ITEMS : role === "creator" ? CREATOR_SIDEBAR_ITEMS : SUPPORTER_SIDEBAR_ITEMS;
 
   const handleLogout = async () => {
     await authClient.signOut();
