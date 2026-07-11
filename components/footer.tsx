@@ -101,7 +101,7 @@ export function Footer() {
               Have an idea you want to bring to the world? Start your campaign today.
             </p>
             <Link 
-              href="/create" 
+              href="/creator/dashboard/create" 
               className="inline-block px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider rounded transition-colors"
             >
               Start a Campaign

@@ -9,19 +9,19 @@ import { useRouter } from "next/navigation";
 // Import useSession removed from here to top
 
 export const SUPPORTER_SIDEBAR_ITEMS = [
-  { name: "Home", href: "/dashboard", icon: Home },
-  { name: "Explore", href: "/dashboard/explore", icon: Compass },
-  { name: "My Contributions", href: "/dashboard/contributions", icon: Heart },
-  { name: "Purchase Credit", href: "/dashboard/credits", icon: CreditCard },
-  { name: "Payment History", href: "/dashboard/payments", icon: ReceiptText },
+  { name: "Home", href: "/supporter/dashboard", icon: Home },
+  { name: "Explore", href: "/supporter/dashboard/explore", icon: Compass },
+  { name: "My Contributions", href: "/supporter/dashboard/contributions", icon: Heart },
+  { name: "Purchase Credit", href: "/supporter/dashboard/credits", icon: CreditCard },
+  { name: "Payment History", href: "/supporter/dashboard/payments", icon: ReceiptText },
 ];
 
 export const CREATOR_SIDEBAR_ITEMS = [
-  { name: "Home", href: "/dashboard", icon: Home },
-  { name: "Add New Campaign", href: "/create", icon: PlusCircle },
-  { name: "My Campaigns", href: "/dashboard/my-campaigns", icon: Layers },
-  { name: "Withdrawals", href: "/dashboard/withdrawals", icon: Landmark },
-  { name: "Payment History", href: "/dashboard/payments", icon: ReceiptText },
+  { name: "Home", href: "/creator/dashboard", icon: Home },
+  { name: "Add New Campaign", href: "/creator/dashboard/create", icon: PlusCircle },
+  { name: "My Campaigns", href: "/creator/dashboard/my-campaigns", icon: Layers },
+  { name: "Withdrawals", href: "/creator/dashboard/withdrawals", icon: Landmark },
+  { name: "Payment History", href: "/creator/dashboard/payments", icon: ReceiptText },
 ];
 
 interface DashboardSidebarProps {

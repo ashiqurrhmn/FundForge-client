@@ -4,9 +4,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/app/lib/auth-client";
 import { SupporterDashboard } from "@/components/dashboard/supporter-dashboard";
-import { CreatorDashboard } from "@/components/dashboard/creator-dashboard";
 
-export default function DashboardPage() {
+export default function SupporterDashboardPage() {
   const { data: session, isPending } = useSession();
   const router = useRouter();
 
@@ -29,14 +28,5 @@ export default function DashboardPage() {
 
   if (!session) return null;
 
-  const user = session.user;
-  
-  // Type coercion since TypeScript might not know about custom 'role' field
-  const userRole = (user as any).role || "supporter";
-
-  if (userRole === "creator") {
-    return <CreatorDashboard user={user} />;
-  }
-
-  return <SupporterDashboard user={user} />;
+  return <SupporterDashboard user={session.user} />;
 }

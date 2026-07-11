@@ -36,7 +36,7 @@ const SLIDES = [
     mission:
       "DISCOVER INSPIRING CAMPAIGNS FROM CREATORS AROUND THE WORLD. FUND THE IDEAS YOU BELIEVE IN.",
     quote: "EVERY GREAT PROJECT STARTS WITH ONE SUPPORTER. BE THAT ONE.",
-    cta: { text: "START A CAMPAIGN", href: "/create" },
+    cta: { text: "START A CAMPAIGN", href: "/creator/dashboard/create" },
     metrics: [
       { label: "BACKERS", value: "50K+" },
       { label: "PROJECTS", value: "1.2K+" },

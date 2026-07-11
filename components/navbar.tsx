@@ -71,7 +71,7 @@ export function Navbar() {
           </Link>
           
           {isLoggedIn && (
-            <Link href="/create" className="text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1.5">
+            <Link href="/creator/dashboard/create" className="text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1.5">
                <PlusCircle className="w-4 h-4" /> Start a Campaign
             </Link>
           )}
@@ -143,7 +143,7 @@ export function Navbar() {
               <Compass className="w-5 h-5 text-neutral-500" /> Explore Campaigns
             </Link>
             {isLoggedIn && (
-              <Link href="/create" className="flex items-center gap-3 text-sm font-medium px-3 py-2.5 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 rounded-lg transition-colors">
+              <Link href="/creator/dashboard/create" className="flex items-center gap-3 text-sm font-medium px-3 py-2.5 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 rounded-lg transition-colors">
                  <PlusCircle className="w-5 h-5 text-neutral-500" /> Start a Campaign
               </Link>
             )}

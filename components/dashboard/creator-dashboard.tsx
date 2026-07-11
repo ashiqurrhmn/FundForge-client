@@ -117,7 +117,7 @@ export function CreatorDashboard({ user }: { user: any }) {
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
           <p className="text-sm text-emerald-50 font-medium mb-1 relative z-10">Total Views</p>
           <h3 className="text-2xl font-black mb-4 relative z-10">{MOCK_METRICS.totalViews}</h3>
-          <Link href="/create" className="bg-white text-emerald-600 dark:text-[#009966] py-2.5 rounded-xl font-bold text-sm hover:bg-emerald-50 dark:hover:bg-white/90 transition-colors flex items-center justify-center gap-2 relative z-10">
+          <Link href="/creator/dashboard/create" className="bg-white text-emerald-600 dark:text-[#009966] py-2.5 rounded-xl font-bold text-sm hover:bg-emerald-50 dark:hover:bg-white/90 transition-colors flex items-center justify-center gap-2 relative z-10">
             Add New Campaign <PlusCircle className="w-4 h-4" />
           </Link>
         </div>
