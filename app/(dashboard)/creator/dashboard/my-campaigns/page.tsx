@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Edit2, Trash2, Loader2, ArrowLeft, Settings, Clock, Users, Radio } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 interface Campaign {
   _id: string;
@@ -61,8 +62,25 @@ export default function MyCampaignsPage() {
     router.push(`/creator/dashboard/edit/${id}`);
   };
 
-  const handleDelete = (id: string) => {
-    console.log("Delete functionality will be added here for:", id);
+  const handleDelete = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this campaign? This action cannot be undone.")) {
+      try {
+        const res = await fetch(`http://localhost:5000/api/campaigns/${id}`, {
+          method: "DELETE"
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          toast.success("Campaign deleted successfully");
+          setCampaigns(campaigns.filter(c => c._id !== id));
+        } else {
+          toast.error(data.message || "Failed to delete campaign");
+        }
+      } catch (error) {
+        console.error("Error deleting campaign:", error);
+        toast.error("An error occurred while deleting");
+      }
+    }
   };
 
   if (isPending || !session) return null;
