@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from "react";
 import { PageTransition } from "@/components/page-transition";
 import { ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FeaturedCarousel } from "@/components/featured-carousel";
 
 const SLIDES = [
   {
@@ -68,6 +69,23 @@ const SLIDE_DURATION = 7000;
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [campaigns, setCampaigns] = useState([]);
+
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns`);
+        const json = await res.json();
+        if (json.success) {
+          // Take top 8 campaigns for featured
+          setCampaigns(json.data.slice(0, 8));
+        }
+      } catch (err) {
+        console.error("Failed to fetch featured campaigns", err);
+      }
+    };
+    fetchCampaigns();
+  }, []);
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
@@ -81,8 +99,16 @@ export default function Home() {
   const slide = SLIDES[currentSlide];
 
   return (
-    <PageTransition className="flex flex-col flex-1 bg-white dark:bg-black font-sans overflow-hidden min-h-[calc(100vh-64px)]">
-      <div className="relative w-full flex-1 bg-white dark:bg-[#0a0a0a] overflow-hidden flex flex-col items-center">
+    <PageTransition className="flex flex-col flex-1 bg-white dark:bg-black font-sans min-h-[calc(100vh-64px)]">
+      {/* Hero Section */}
+      <div className="relative w-full min-h-[calc(100vh-64px)] bg-white dark:bg-[#0a0a0a] overflow-hidden flex flex-col items-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 1.15, filter: "blur(10px)" }}
+          whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          viewport={{ amount: 0.2 }}
+          transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+          className="absolute inset-0"
+        >
         {/* Giant Watermark Text Behind Everything */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -243,7 +269,13 @@ export default function Home() {
             ))}
           </div>
         </div>
+        </motion.div>
       </div>
+
+      {/* Featured Campaigns Section */}
+      {campaigns.length > 0 && (
+        <FeaturedCarousel campaigns={campaigns} />
+      )}
     </PageTransition>
   );
 }

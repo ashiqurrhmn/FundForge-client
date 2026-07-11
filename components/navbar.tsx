@@ -52,16 +52,25 @@ export function Navbar() {
 
         {/* Desktop Search */}
         <div className="hidden md:flex flex-1 max-w-xl mx-8">
-          <div className="relative w-full group">
+          <form 
+            className="relative w-full group"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              const q = formData.get("q") as string;
+              if (q) router.push(`/explore?search=${encodeURIComponent(q)}`);
+            }}
+          >
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-neutral-500 dark:text-neutral-400 group-focus-within:text-emerald-600 dark:group-focus-within:text-emerald-500 transition-colors">
               <Search className="w-4 h-4" />
             </div>
             <input
+              name="q"
               type="text"
               placeholder="Discover campaigns..."
               className="flex h-10 w-full rounded-full border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-3 py-2 pl-10 text-sm ring-offset-white dark:ring-offset-neutral-950 placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:bg-white dark:focus-visible:bg-neutral-950 transition-all text-neutral-900 dark:text-white"
             />
-          </div>
+          </form>
         </div>
 
         {/* Desktop Navigation */}
@@ -128,16 +137,28 @@ export function Navbar() {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-4 py-4 space-y-4 shadow-lg">
-           <div className="relative w-full">
+           <form 
+             className="relative w-full"
+             onSubmit={(e) => {
+               e.preventDefault();
+               const formData = new FormData(e.currentTarget);
+               const q = formData.get("q") as string;
+               if (q) {
+                 setIsMenuOpen(false);
+                 router.push(`/explore?search=${encodeURIComponent(q)}`);
+               }
+             }}
+           >
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-neutral-500">
               <Search className="w-4 h-4" />
             </div>
             <input
+              name="q"
               type="text"
               placeholder="Discover campaigns..."
               className="flex h-11 w-full rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-3 py-2 pl-10 text-sm ring-offset-white dark:ring-offset-neutral-950 placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 text-neutral-900 dark:text-white"
             />
-          </div>
+          </form>
           <div className="flex flex-col gap-1">
             <Link href="/explore" className="flex items-center gap-3 text-sm font-medium px-3 py-2.5 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 rounded-lg transition-colors">
               <Compass className="w-5 h-5 text-neutral-500" /> Explore Campaigns

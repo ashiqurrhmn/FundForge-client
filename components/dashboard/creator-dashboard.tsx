@@ -181,7 +181,7 @@ export function CreatorDashboard({ user }: { user: any }) {
 
                       <div>
                         <div className="flex justify-between text-xs font-bold mb-2">
-                          <span className="text-neutral-800 dark:text-white">${raised.toLocaleString()} <span className="text-neutral-400 font-medium">of ${campaign.funding_goal.toLocaleString()}</span></span>
+                          <span className="text-neutral-800 dark:text-white">{raised.toLocaleString()} Cr <span className="text-neutral-400 font-medium">of {campaign.funding_goal.toLocaleString()} Cr</span></span>
                           <span className="text-emerald-500 dark:text-[#004F3B]">{percentFunded}%</span>
                         </div>
                         <div className="w-full bg-neutral-100 dark:bg-neutral-800 rounded-full h-1.5 mb-4 overflow-hidden">

@@ -23,7 +23,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         />
 
         {/* Content Area */}
-        <main className="flex-1 h-full overflow-y-auto bg-neutral-50/50 dark:bg-neutral-900/20 pb-24 lg:pb-12">
+        <main data-lenis-prevent="true" className="flex-1 h-full overflow-y-auto bg-neutral-50/50 dark:bg-neutral-900/20 pb-24 lg:pb-12">
           {children}
         </main>
       </div>
