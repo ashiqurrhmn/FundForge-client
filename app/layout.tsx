@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import NextTopLoader from 'nextjs-toploader';
 import { ConditionalNavbar } from "@/components/conditional-navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -32,6 +33,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
+        <NextTopLoader 
+          color="#10b981" 
+          height={3} 
+          showSpinner={false} 
+          shadow="0 0 10px #10b981,0 0 5px #10b981" 
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
