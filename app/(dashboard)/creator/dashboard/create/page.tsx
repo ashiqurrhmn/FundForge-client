@@ -3,9 +3,10 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/app/lib/auth-client";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Upload, Loader2, ArrowLeft, Image as ImageIcon } from "lucide-react";
 import toast from "react-hot-toast";
+import { DashboardSkeleton } from "@/components/skeletons/dashboard-skeleton";
 import Link from "next/link";
 
 export default function CreateCampaignPage() {
@@ -34,7 +35,7 @@ export default function CreateCampaignPage() {
     }
   }, [isPending, session, router]);
 
-  if (isPending || !session) return null;
+  if (isPending || !session) return <DashboardSkeleton />;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -92,7 +93,7 @@ export default function CreateCampaignPage() {
         createdAt: new Date().toISOString()
       };
 
-      const res = await fetch("http://localhost:5000/api/campaigns", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)

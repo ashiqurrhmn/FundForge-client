@@ -7,6 +7,8 @@ import { CheckCircle, XCircle, Loader2, ArrowLeft, Search, Filter, ArrowDownUp }
 import Link from "next/link";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import { DashboardSkeleton } from "@/components/skeletons/dashboard-skeleton";
+import { AdminTableSkeleton } from "@/components/skeletons/admin-table-skeleton";
 
 interface Campaign {
   _id: string;
@@ -83,7 +85,7 @@ export default function AdminCampaignsPage() {
   const fetchCampaigns = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/campaigns/admin`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/admin`);
       const data = await res.json();
       if (data.success) {
         setCampaigns(data.data);
@@ -98,7 +100,7 @@ export default function AdminCampaignsPage() {
   const handleUpdateStatus = async (id: string, newStatus: string) => {
     setProcessingId(id);
     try {
-      const res = await fetch(`http://localhost:5000/api/campaigns/${id}/status`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/${id}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus })
@@ -120,7 +122,7 @@ export default function AdminCampaignsPage() {
     }
   };
 
-  if (isPending || !session) return null;
+  if (isPending || !session) return <DashboardSkeleton />;
 
   return (
     <div className="p-6 md:p-8 w-full">
@@ -181,9 +183,8 @@ export default function AdminCampaignsPage() {
 
         <div className="p-0 overflow-x-auto">
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-20 text-neutral-500">
-              <Loader2 className="w-8 h-8 animate-spin text-emerald-500 mb-4" />
-              <p>Loading campaigns...</p>
+            <div className="p-6">
+              <AdminTableSkeleton />
             </div>
           ) : filteredAndSortedCampaigns.length === 0 ? (
             <div className="text-center py-20 text-neutral-500">

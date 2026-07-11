@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { DollarSign, Users, Eye, PlusCircle, ArrowRight, Clock, Star, TrendingUp, Settings, EyeOff, Target, Edit2, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ManageProfileModal } from "./manage-profile-modal";
+import { CampaignCardSkeleton } from "@/components/skeletons/campaign-card-skeleton";
 
 // Mock Data
 const MOCK_METRICS = {
@@ -16,32 +17,7 @@ const MOCK_METRICS = {
   viewsTrend: "+24%",
 };
 
-const MY_CAMPAIGNS = [
-  {
-    id: 10,
-    title: "Eco-Friendly Water Filtration for Rural Villages",
-    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&q=80",
-    raised: 12500,
-    goal: 15000,
-    daysLeft: 14,
-    status: "Active",
-    category: "Environment",
-    backers: 142,
-    updates: 3
-  },
-  {
-    id: 11,
-    title: "Solar-Powered Community Garden Hub",
-    image: "https://images.unsplash.com/photo-1592424001807-6c2eeb2957b6?w=800&q=80",
-    raised: 132500,
-    goal: 100000,
-    daysLeft: 0,
-    status: "Completed",
-    category: "Community",
-    backers: 1098,
-    updates: 12
-  }
-];
+
 
 const RECENT_BACKERS = [
   { id: 101, name: "Sarah J.", amount: 50, campaign: "Eco-Friendly Water Filtration", time: "2 hours ago", avatar: "https://i.pravatar.cc/150?u=sarah" },
@@ -52,6 +28,27 @@ const RECENT_BACKERS = [
 
 export function CreatorDashboard({ user }: { user: any }) {
   const [isManageProfileOpen, setIsManageProfileOpen] = useState(false);
+  const [campaigns, setCampaigns] = useState<any[]>([]);
+  const [isLoadingCampaigns, setIsLoadingCampaigns] = useState(true);
+
+  useEffect(() => {
+    if (user?.id) {
+      const fetchCampaigns = async () => {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/creator/${user.id}`);
+          const data = await res.json();
+          if (data.success) {
+            setCampaigns(data.data);
+          }
+        } catch (error) {
+          console.error("Failed to fetch campaigns:", error);
+        } finally {
+          setIsLoadingCampaigns(false);
+        }
+      };
+      fetchCampaigns();
+    }
+  }, [user]);
 
   return (
     <div className="p-6 md:p-8 w-full">
@@ -133,20 +130,41 @@ export function CreatorDashboard({ user }: { user: any }) {
                 <h3 className="text-lg font-bold text-neutral-800 dark:text-white mb-1">My Campaigns</h3>
                 <p className="text-xs text-neutral-400">Track and manage your active funding goals</p>
               </div>
-              <button className="text-emerald-500 dark:text-[#004F3B] text-sm font-bold hover:underline flex items-center gap-1">
+              <Link href="/creator/dashboard/my-campaigns" className="text-emerald-500 dark:text-[#004F3B] text-sm font-bold hover:underline flex items-center gap-1">
                 View all <ChevronRight className="w-4 h-4" />
-              </button>
+              </Link>
            </div>
 
            <div className="space-y-6 mb-6">
-              {MY_CAMPAIGNS.map(campaign => {
-                const percentFunded = Math.min(100, Math.round((campaign.raised / campaign.goal) * 100));
-                const isActive = campaign.status === "Active";
+              {isLoadingCampaigns ? (
+                <div className="flex flex-col gap-6">
+                  <CampaignCardSkeleton />
+                  <CampaignCardSkeleton />
+                  <CampaignCardSkeleton />
+                </div>
+              ) : campaigns.length === 0 ? (
+                <div className="text-center py-10">
+                  <p className="text-neutral-500 dark:text-neutral-400 mb-4">You haven't created any campaigns yet.</p>
+                  <Link href="/creator/dashboard/create" className="inline-block bg-emerald-500 text-white px-6 py-2 rounded-xl font-medium hover:bg-emerald-600 transition-colors">
+                    Create One Now
+                  </Link>
+                </div>
+              ) : campaigns.slice(0, 3).map(campaign => {
+                const raised = 0; // Mock data since no actual donations exist
+                const percentFunded = Math.min(100, Math.round((raised / campaign.funding_goal) * 100));
+                const isActive = campaign.status === "approved";
+                
+                const diff = new Date(campaign.deadline).getTime() - new Date().getTime();
+                const daysLeft = diff > 0 ? Math.ceil(diff / (1000 * 3600 * 24)) : 0;
 
                 return (
-                  <div key={campaign.id} className="flex flex-col md:flex-row gap-6 p-4 rounded-2xl border border-neutral-100 dark:border-neutral-800 hover:shadow-md transition-shadow">
+                  <div key={campaign._id} className="flex flex-col md:flex-row gap-6 p-4 rounded-2xl border border-neutral-100 dark:border-neutral-800 hover:shadow-md transition-shadow">
                     <div className="w-full md:w-40 h-32 rounded-xl overflow-hidden shrink-0 relative">
-                      <img src={campaign.image} alt={campaign.title} className={`w-full h-full object-cover transition-transform duration-500 ${!isActive && 'grayscale opacity-70'}`} />
+                      <img 
+                        src={campaign.campaign_image_url || "https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2560&q=80"} 
+                        alt={campaign.campaign_title} 
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
+                      />
                       <div className="absolute top-2 left-2 bg-white/90 dark:bg-black/90 backdrop-blur px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">
                         {campaign.category}
                       </div>
@@ -154,35 +172,35 @@ export function CreatorDashboard({ user }: { user: any }) {
                     
                     <div className="flex-1 flex flex-col justify-between">
                       <div>
-                        <h4 className="font-bold text-base text-neutral-800 dark:text-white mb-2 line-clamp-2">{campaign.title}</h4>
+                        <h4 className="font-bold text-base text-neutral-800 dark:text-white mb-2 line-clamp-2">{campaign.campaign_title}</h4>
                         <div className="flex gap-4 text-xs font-bold text-neutral-500 dark:text-neutral-400 mb-4">
-                           <span className="flex items-center gap-1 text-emerald-500 dark:text-[#004F3B]"><Users className="w-3.5 h-3.5"/> {campaign.backers} Backers</span>
-                           <span className="flex items-center gap-1"><Target className="w-3.5 h-3.5"/> {campaign.updates} Updates</span>
+                           <span className="flex items-center gap-1 text-emerald-500 dark:text-[#004F3B]"><Users className="w-3.5 h-3.5"/> 0 Backers</span>
+                           <span className="flex items-center gap-1"><Target className="w-3.5 h-3.5"/> 0 Updates</span>
                         </div>
                       </div>
 
                       <div>
                         <div className="flex justify-between text-xs font-bold mb-2">
-                          <span className="text-neutral-800 dark:text-white">${campaign.raised.toLocaleString()} <span className="text-neutral-400 font-medium">of ${campaign.goal.toLocaleString()}</span></span>
+                          <span className="text-neutral-800 dark:text-white">${raised.toLocaleString()} <span className="text-neutral-400 font-medium">of ${campaign.funding_goal.toLocaleString()}</span></span>
                           <span className="text-emerald-500 dark:text-[#004F3B]">{percentFunded}%</span>
                         </div>
                         <div className="w-full bg-neutral-100 dark:bg-neutral-800 rounded-full h-1.5 mb-4 overflow-hidden">
-                          <div className={`${isActive ? 'bg-emerald-500 dark:bg-[#004F3B]' : 'bg-neutral-300 dark:bg-neutral-600'} h-1.5 rounded-full`} style={{ width: `${percentFunded}%` }}></div>
+                          <div className={`${isActive ? 'bg-emerald-500 dark:bg-[#004F3B]' : 'bg-neutral-300 dark:bg-neutral-600'} h-full rounded-full`} style={{ width: `${percentFunded}%` }}></div>
                         </div>
 
                         <div className="flex items-center justify-between">
                            <div className="flex gap-2">
-                             <button className="text-xs font-bold px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-lg transition-colors flex items-center gap-1.5">
+                             <Link href={`/creator/dashboard/edit/${campaign._id}`} className="text-xs font-bold px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-lg transition-colors flex items-center gap-1.5">
                                 <Settings className="w-3.5 h-3.5"/> Manage
-                             </button>
+                             </Link>
                            </div>
                            {isActive ? (
                              <span className="text-xs font-bold text-neutral-500 flex items-center gap-1 bg-neutral-50 dark:bg-neutral-800/50 px-3 py-1.5 rounded-lg">
-                               <Clock className="w-3.5 h-3.5" /> {campaign.daysLeft} days left
+                               <Clock className="w-3.5 h-3.5" /> {daysLeft} days left
                              </span>
                            ) : (
-                             <span className="text-xs font-bold text-neutral-400 bg-neutral-50 dark:bg-neutral-800/50 px-3 py-1.5 rounded-lg">
-                               Completed
+                             <span className="text-xs font-bold text-neutral-400 bg-neutral-50 dark:bg-neutral-800/50 px-3 py-1.5 rounded-lg capitalize">
+                               {campaign.status}
                              </span>
                            )}
                         </div>

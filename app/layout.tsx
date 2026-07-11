@@ -6,6 +6,7 @@ import { ConditionalNavbar } from "@/components/conditional-navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ConditionalFooter } from "@/components/conditional-footer";
+import { SmoothScrollProvider } from "@/components/smooth-scroll";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,12 +47,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ConditionalNavbar />
-          <main className="flex-1 flex flex-col">
-            {children}
-          </main>
-          <ConditionalFooter />
-          <ThemeToggle />
+          <SmoothScrollProvider>
+            <ConditionalNavbar />
+            <main className="flex-1 flex flex-col">
+              {children}
+            </main>
+            <ConditionalFooter />
+            <ThemeToggle />
+          </SmoothScrollProvider>
         </ThemeProvider>
       </body>
     </html>

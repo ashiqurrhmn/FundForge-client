@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/app/lib/auth-client";
 import { CreatorDashboard } from "@/components/dashboard/creator-dashboard";
+import { DashboardSkeleton } from "@/components/skeletons/dashboard-skeleton";
 
 export default function CreatorDashboardPage() {
   const { data: session, isPending } = useSession();
@@ -16,14 +17,7 @@ export default function CreatorDashboardPage() {
   }, [isPending, session, router]);
 
   if (isPending) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-950">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-emerald-200 dark:border-emerald-900 border-t-emerald-600 dark:border-t-emerald-500 rounded-full animate-spin"></div>
-          <p className="text-neutral-500 dark:text-neutral-400 font-medium animate-pulse">Loading dashboard...</p>
-        </div>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   if (!session) return null;

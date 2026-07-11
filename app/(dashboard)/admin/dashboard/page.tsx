@@ -7,6 +7,7 @@ import { ShieldAlert, Users, Layers, TrendingUp, Edit2 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ManageProfileModal } from "@/components/dashboard/manage-profile-modal";
+import { DashboardSkeleton } from "@/components/skeletons/dashboard-skeleton";
 
 export default function AdminDashboardPage() {
   const { data: session, isPending } = useSession();
@@ -23,7 +24,7 @@ export default function AdminDashboardPage() {
     }
   }, [isPending, session, router]);
 
-  if (isPending || !session) return null;
+  if (isPending || !session) return <DashboardSkeleton />;
 
   const stats = [
     { name: "Pending Campaigns", value: "Needs Review", icon: ShieldAlert, color: "text-amber-500", bg: "bg-amber-100 dark:bg-amber-500/10", href: "/admin/dashboard/campaigns" },
