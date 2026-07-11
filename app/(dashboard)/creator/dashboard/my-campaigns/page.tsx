@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "@/app/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { Edit2, Trash2, Loader2, ArrowLeft } from "lucide-react";
+import { Edit2, Trash2, Loader2, ArrowLeft, Settings, Clock, Users, Radio } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -14,6 +14,7 @@ interface Campaign {
   funding_goal: number;
   deadline: string;
   status: string;
+  campaign_image_url: string;
 }
 
 export default function MyCampaignsPage() {
@@ -50,8 +51,14 @@ export default function MyCampaignsPage() {
     }
   };
 
+  const getDaysLeft = (deadline: string) => {
+    const diff = new Date(deadline).getTime() - new Date().getTime();
+    const days = Math.ceil(diff / (1000 * 3600 * 24));
+    return days > 0 ? days : 0;
+  };
+
   const handleUpdate = (id: string) => {
-    console.log("Update functionality will be added here for:", id);
+    router.push(`/creator/dashboard/edit/${id}`);
   };
 
   const handleDelete = (id: string) => {
@@ -77,7 +84,7 @@ export default function MyCampaignsPage() {
             <p className="text-emerald-100 text-sm mt-1">Manage and track your submitted campaigns.</p>
           </div>
 
-          <div className="p-0 overflow-x-auto">
+          <div className="p-0">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-20 text-neutral-500">
                 <Loader2 className="w-8 h-8 animate-spin text-emerald-500 mb-4" />
@@ -91,65 +98,77 @@ export default function MyCampaignsPage() {
                 </Link>
               </div>
             ) : (
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-neutral-50 dark:bg-neutral-950/50 border-b border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                    <th className="px-6 py-4 font-semibold whitespace-nowrap">Campaign Title</th>
-                    <th className="px-6 py-4 font-semibold whitespace-nowrap">Category</th>
-                    <th className="px-6 py-4 font-semibold whitespace-nowrap">Goal (Credits)</th>
-                    <th className="px-6 py-4 font-semibold whitespace-nowrap">Deadline</th>
-                    <th className="px-6 py-4 font-semibold whitespace-nowrap">Status</th>
-                    <th className="px-6 py-4 font-semibold whitespace-nowrap text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                  {campaigns.map((campaign) => (
-                    <tr key={campaign._id} className="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors group">
-                      <td className="px-6 py-4 font-medium text-neutral-900 dark:text-white max-w-xs truncate" title={campaign.campaign_title}>
-                        {campaign.campaign_title}
-                      </td>
-                      <td className="px-6 py-4 text-neutral-600 dark:text-neutral-300">
-                        <span className="inline-block px-2.5 py-1 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-xs font-medium">
+              <div className="flex flex-col gap-6 p-6">
+                {campaigns.map((campaign) => {
+                  const daysLeft = getDaysLeft(campaign.deadline);
+                  const raised = 0; // Mock data
+                  const progressPercentage = Math.min(Math.round((raised / campaign.funding_goal) * 100), 100);
+
+                  return (
+                    <div key={campaign._id} className="flex flex-col md:flex-row gap-6 p-4 border border-neutral-200 dark:border-neutral-800 rounded-2xl bg-white dark:bg-neutral-900 transition-colors hover:border-neutral-300 dark:hover:border-neutral-700 shadow-sm hover:shadow-md">
+                      <div className="relative w-full md:w-48 h-48 rounded-xl overflow-hidden shrink-0">
+                        <img 
+                          src={campaign.campaign_image_url || "https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2560&q=80"} 
+                          alt={campaign.campaign_title} 
+                          className="w-full h-full object-cover" 
+                        />
+                        <div className="absolute top-3 left-3 bg-black/80 text-white text-[10px] font-black tracking-wider uppercase px-2 py-1 rounded">
                           {campaign.category}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-emerald-600 dark:text-[#004F3B] font-bold">
-                        {campaign.funding_goal.toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4 text-neutral-600 dark:text-neutral-300 text-sm">
-                        {new Date(campaign.deadline).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-block px-2.5 py-1 rounded-lg text-xs font-bold capitalize ${
-                          campaign.status === 'approved' ? 'bg-emerald-100 text-emerald-700 dark:bg-[#004F3B]/30 dark:text-emerald-400' :
-                          campaign.status === 'rejected' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
-                          'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-                        }`}>
-                          {campaign.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => handleUpdate(campaign._id)}
-                            className="p-2 text-neutral-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                            title="Update Campaign"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(campaign._id)}
-                            className="p-2 text-neutral-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                            title="Delete Campaign"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
                         </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </div>
+                      
+                      <div className="flex-1 flex flex-col justify-between py-1">
+                        <div>
+                          <div className="flex justify-between items-start mb-2">
+                            <h3 className="text-xl font-bold text-neutral-900 dark:text-white line-clamp-2 pr-4">{campaign.campaign_title}</h3>
+                            <span className={`shrink-0 inline-block px-2.5 py-1 rounded-lg text-xs font-bold capitalize ${
+                              campaign.status === 'approved' ? 'bg-emerald-100 text-emerald-700 dark:bg-[#004F3B]/30 dark:text-emerald-400' :
+                              campaign.status === 'rejected' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                              'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                            }`}>
+                              {campaign.status}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-emerald-600 dark:text-emerald-500 font-medium mb-4">
+                            <span className="flex items-center gap-1.5"><Users className="w-4 h-4"/> 0 Backers</span>
+                            <span className="flex items-center gap-1.5"><Radio className="w-4 h-4"/> 0 Updates</span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-end justify-between mb-2">
+                            <div className="text-sm">
+                              <span className="font-bold text-neutral-900 dark:text-white">${raised.toLocaleString()}</span>
+                              <span className="text-neutral-500"> of ${campaign.funding_goal.toLocaleString()}</span>
+                            </div>
+                            <div className="text-sm font-bold text-emerald-600 dark:text-emerald-500">
+                              {progressPercentage}%
+                            </div>
+                          </div>
+                          <div className="w-full h-1.5 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden mb-5">
+                            <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${progressPercentage}%` }}></div>
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div className="flex gap-2">
+                              <button onClick={() => handleUpdate(campaign._id)} className="flex items-center gap-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors">
+                                <Settings className="w-4 h-4" /> Manage
+                              </button>
+                              <button onClick={() => handleDelete(campaign._id)} className="flex items-center justify-center w-9 h-9 bg-neutral-100 hover:bg-red-100 dark:bg-neutral-800 dark:hover:bg-red-900/30 text-neutral-500 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition-colors" title="Delete">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                            <div className="flex items-center gap-1.5 text-sm font-medium text-neutral-500">
+                              <Clock className="w-4 h-4" />
+                              <span>{daysLeft} days left</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             )}
           </div>
         </motion.div>
