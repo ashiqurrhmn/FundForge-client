@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSession } from "@/app/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { CheckCircle, XCircle, Loader2, ArrowLeft } from "lucide-react";
+import { CheckCircle, XCircle, Loader2, ArrowLeft, Search, Filter, ArrowDownUp } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -27,6 +27,42 @@ export default function AdminCampaignsPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
+  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
+
+  const filteredAndSortedCampaigns = useMemo(() => {
+    let result = [...campaigns];
+
+    if (searchQuery.trim() !== "") {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(c => 
+        c.campaign_title.toLowerCase().includes(q) || 
+        c.creator_name.toLowerCase().includes(q) ||
+        c.creator_email.toLowerCase().includes(q)
+      );
+    }
+
+    if (statusFilter !== "all") {
+      result = result.filter(c => c.status === statusFilter);
+    }
+
+    result.sort((a, b) => {
+      if (sortBy === "newest") {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      } else if (sortBy === "oldest") {
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      } else if (sortBy === "goal_high") {
+        return b.funding_goal - a.funding_goal;
+      } else if (sortBy === "goal_low") {
+        return a.funding_goal - b.funding_goal;
+      }
+      return 0;
+    });
+
+    return result;
+  }, [campaigns, searchQuery, statusFilter, sortBy]);
 
   useEffect(() => {
     if (!isPending) {
@@ -99,7 +135,48 @@ export default function AdminCampaignsPage() {
       >
         <div className="bg-emerald-500 dark:bg-[#004F3B] px-8 py-6 text-white">
           <h1 className="text-2xl font-black">Manage Campaigns</h1>
-          <p className="text-emerald-100 text-sm mt-1">Review and approve user-submitted campaigns.</p>
+          <p className="text-emerald-100 text-sm mt-1">Review and manage user-submitted campaigns.</p>
+        </div>
+
+        <div className="p-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900 flex flex-col md:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+            <input 
+              type="text" 
+              placeholder="Search by title, name, or email..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-sm transition-all"
+            />
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="appearance-none pl-9 pr-8 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-sm transition-all font-medium text-neutral-700 dark:text-neutral-300"
+              >
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
+            </div>
+            <div className="relative">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="appearance-none pl-9 pr-8 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-sm transition-all font-medium text-neutral-700 dark:text-neutral-300"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="goal_high">Highest Goal</option>
+                <option value="goal_low">Lowest Goal</option>
+              </select>
+              <ArrowDownUp className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
+            </div>
+          </div>
         </div>
 
         <div className="p-0 overflow-x-auto">
@@ -108,9 +185,9 @@ export default function AdminCampaignsPage() {
               <Loader2 className="w-8 h-8 animate-spin text-emerald-500 mb-4" />
               <p>Loading campaigns...</p>
             </div>
-          ) : campaigns.length === 0 ? (
+          ) : filteredAndSortedCampaigns.length === 0 ? (
             <div className="text-center py-20 text-neutral-500">
-              <p>No campaigns found in the system.</p>
+              <p>No campaigns found matching your criteria.</p>
             </div>
           ) : (
             <table className="w-full text-left border-collapse">
@@ -125,7 +202,7 @@ export default function AdminCampaignsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                {campaigns.map((campaign) => (
+                {filteredAndSortedCampaigns.map((campaign) => (
                   <tr key={campaign._id} className="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors">
                     <td className="px-6 py-4 font-medium text-neutral-900 dark:text-white max-w-[200px] truncate" title={campaign.campaign_title}>
                       {campaign.campaign_title}
@@ -153,8 +230,8 @@ export default function AdminCampaignsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      {campaign.status === "pending" ? (
-                        <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-2">
+                        {campaign.status !== "approved" && (
                           <button
                             onClick={() => handleUpdateStatus(campaign._id, "approved")}
                             disabled={processingId === campaign._id}
@@ -163,6 +240,8 @@ export default function AdminCampaignsPage() {
                           >
                             {processingId === campaign._id ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle className="w-5 h-5" />}
                           </button>
+                        )}
+                        {campaign.status !== "rejected" && (
                           <button
                             onClick={() => handleUpdateStatus(campaign._id, "rejected")}
                             disabled={processingId === campaign._id}
@@ -171,10 +250,8 @@ export default function AdminCampaignsPage() {
                           >
                             {processingId === campaign._id ? <Loader2 className="w-5 h-5 animate-spin" /> : <XCircle className="w-5 h-5" />}
                           </button>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-neutral-400">Processed</span>
-                      )}
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}

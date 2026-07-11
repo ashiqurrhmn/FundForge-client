@@ -102,17 +102,19 @@ export function DashboardSidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Dash
       <aside 
         ref={sidebarRef}
         style={{ width: isCollapsed ? '96px' : `${sidebarWidth}px` }}
-        className={`relative shrink-0 hidden lg:flex flex-col border-r border-neutral-100 dark:border-neutral-800/50 py-8 ${isCollapsed ? "px-4" : "px-6"} bg-white dark:bg-neutral-950 z-20 h-full overflow-y-auto ${!isResizing ? "transition-all duration-300 ease-in-out" : ""}`}
+        className={`relative shrink-0 hidden lg:flex flex-col border-r border-neutral-100 dark:border-neutral-800/50 bg-white dark:bg-neutral-950 z-20 h-full ${!isResizing ? "transition-all duration-300 ease-in-out" : ""}`}
       >
         {/* Resize Handle */}
         <div 
           onMouseDown={startResizing}
-          className="absolute right-[-10px] top-0 bottom-0 w-5 cursor-col-resize flex items-center justify-center group z-50"
+          className="absolute -right-2 top-0 bottom-0 w-4 cursor-col-resize flex items-center justify-center group z-50"
         >
           <div className="h-8 w-1.5 bg-neutral-200 dark:bg-neutral-800 rounded-full group-hover:bg-emerald-400 group-active:bg-emerald-500 group-hover:scale-y-110 transition-all flex items-center justify-center shadow-sm overflow-hidden">
              <GripVertical className="w-3 h-3 text-neutral-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
         </div>
+        
+        <div className={`flex flex-col h-full overflow-y-auto overflow-x-hidden py-8 ${isCollapsed ? "px-4" : "px-6"}`}>
         <nav className="flex-1 space-y-2">
           {SIDEBAR_ITEMS.map((item) => {
             const isActive = pathname === item.href;
@@ -143,6 +145,7 @@ export function DashboardSidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Dash
             <LogOut className="w-5 h-5 shrink-0 text-neutral-400 dark:text-neutral-500 group-hover:text-red-500 transition-colors" />
             {!isCollapsed && <span>Log out</span>}
           </button>
+        </div>
         </div>
       </aside>
 
