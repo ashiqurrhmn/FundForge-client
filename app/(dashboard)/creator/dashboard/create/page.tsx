@@ -87,6 +87,7 @@ export default function CreateCampaignPage() {
         creator_id: session.user.id,
         creator_name: session.user.name,
         creator_email: session.user.email,
+        creator_image: session.user.image || "",
         status: "pending",
         createdAt: new Date().toISOString()
       };
@@ -113,10 +114,10 @@ export default function CreateCampaignPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 pt-24 pb-12">
-      <div className="container mx-auto max-w-4xl px-4">
+    <div className="p-6 md:p-8 w-full">
+      <div className="w-full">
         
-        <Link href="/dashboard" className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 hover:text-emerald-600 dark:hover:text-emerald-500 mb-8 transition-colors">
+        <Link href="/creator/dashboard" className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 hover:text-emerald-500 dark:hover:text-[#004F3B] mb-6 transition-colors">
           <ArrowLeft className="w-4 h-4" /> Back to Dashboard
         </Link>
 
@@ -125,7 +126,7 @@ export default function CreateCampaignPage() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white dark:bg-neutral-900 rounded-3xl shadow-xl overflow-hidden border border-neutral-200 dark:border-neutral-800"
         >
-          <div className="bg-emerald-600 px-8 py-10 text-white">
+          <div className="bg-emerald-500 dark:bg-[#004F3B] px-8 py-5 text-white">
             <h1 className="text-3xl font-black mb-2">Start a New Campaign</h1>
             <p className="text-emerald-100">Share your vision with the world and get funded.</p>
           </div>
@@ -139,7 +140,7 @@ export default function CreateCampaignPage() {
               </label>
               <div 
                 onClick={() => fileInputRef.current?.click()}
-                className={`relative w-full h-64 md:h-80 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden ${previewUrl ? 'border-transparent' : 'border-neutral-300 dark:border-neutral-700 hover:border-emerald-500 dark:hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-950/20'}`}
+                className={`relative w-full h-64 md:h-80 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden ${previewUrl ? 'border-transparent' : 'border-neutral-300 dark:border-neutral-700 hover:border-emerald-500 dark:hover:border-[#004F3B] hover:bg-emerald-50 dark:hover:bg-[#004F3B]/20'}`}
               >
                 {previewUrl ? (
                   <>
@@ -165,9 +166,9 @@ export default function CreateCampaignPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Title */}
-              <div className="md:col-span-2 space-y-2">
+              <div className="space-y-2">
                 <label htmlFor="campaign_title" className="block text-sm font-bold text-neutral-800 dark:text-neutral-200">
                   Campaign Title
                 </label>
@@ -177,7 +178,7 @@ export default function CreateCampaignPage() {
                   required
                   value={formData.campaign_title}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all dark:text-white"
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-[#004F3B] focus:border-emerald-500 dark:focus:border-[#004F3B] transition-all dark:text-white"
                   placeholder="e.g., Help us build a solar-powered water pump"
                 />
               </div>
@@ -193,7 +194,7 @@ export default function CreateCampaignPage() {
                   required
                   value={formData.category}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all dark:text-white"
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-[#004F3B] focus:border-emerald-500 dark:focus:border-[#004F3B] transition-all dark:text-white"
                 >
                   <option value="Technology">Technology</option>
                   <option value="Art">Art</option>
@@ -216,7 +217,7 @@ export default function CreateCampaignPage() {
                   min={new Date().toISOString().split('T')[0]}
                   value={formData.deadline}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all dark:text-white"
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-[#004F3B] focus:border-emerald-500 dark:focus:border-[#004F3B] transition-all dark:text-white"
                 />
               </div>
 
@@ -233,7 +234,7 @@ export default function CreateCampaignPage() {
                   min="1"
                   value={formData.funding_goal}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all dark:text-white"
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-[#004F3B] focus:border-emerald-500 dark:focus:border-[#004F3B] transition-all dark:text-white"
                   placeholder="e.g., 5000"
                 />
               </div>
@@ -251,13 +252,13 @@ export default function CreateCampaignPage() {
                   min="1"
                   value={formData.minimum_contribution}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all dark:text-white"
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-[#004F3B] focus:border-emerald-500 dark:focus:border-[#004F3B] transition-all dark:text-white"
                   placeholder="e.g., 10"
                 />
               </div>
 
               {/* Story */}
-              <div className="md:col-span-2 space-y-2">
+              <div className="md:col-span-2 lg:col-span-3 space-y-2">
                 <label htmlFor="campaign_story" className="block text-sm font-bold text-neutral-800 dark:text-neutral-200">
                   Campaign Story
                 </label>
@@ -268,13 +269,13 @@ export default function CreateCampaignPage() {
                   rows={5}
                   value={formData.campaign_story}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all dark:text-white resize-y"
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-[#004F3B] focus:border-emerald-500 dark:focus:border-[#004F3B] transition-all dark:text-white resize-y"
                   placeholder="Tell potential supporters about your project..."
                 />
               </div>
 
               {/* Reward Info */}
-              <div className="md:col-span-2 space-y-2">
+              <div className="md:col-span-2 lg:col-span-3 space-y-2">
                 <label htmlFor="reward_info" className="block text-sm font-bold text-neutral-800 dark:text-neutral-200">
                   Reward Information
                 </label>
@@ -285,7 +286,7 @@ export default function CreateCampaignPage() {
                   rows={3}
                   value={formData.reward_info}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all dark:text-white resize-y"
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-[#004F3B] focus:border-emerald-500 dark:focus:border-[#004F3B] transition-all dark:text-white resize-y"
                   placeholder="What will supporters receive for pledging?"
                 />
               </div>
@@ -295,7 +296,7 @@ export default function CreateCampaignPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full md:w-auto flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-600/30"
+                className="w-full md:w-auto flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-white bg-emerald-500 dark:bg-[#004F3B] hover:bg-emerald-600 dark:hover:bg-[#003d2e] rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/30 dark:shadow-[#004F3B]/30"
               >
                 {isSubmitting ? (
                   <>

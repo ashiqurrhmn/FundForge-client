@@ -12,6 +12,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-emerald-500: #00BC7D;
+  --color-emerald-600: #009966;
 }
 
 .dark {

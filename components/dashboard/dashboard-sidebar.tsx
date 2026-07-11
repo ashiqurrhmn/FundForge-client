@@ -55,11 +55,11 @@ export function DashboardSidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Dash
                 href={item.href}
                 className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl font-medium transition-all ${
                   isActive
-                    ? "bg-emerald-500 dark:bg-[#009966] text-white shadow-md shadow-emerald-500/20 dark:shadow-[#009966]/20 translate-x-1"
+                    ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold shadow-sm ring-1 ring-emerald-500/20 dark:ring-emerald-400/20"
                     : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-neutral-900"
                 }`}
               >
-                <item.icon className={`w-5 h-5 ${isActive ? "text-white" : "text-emerald-500/80 dark:text-[#009966]/80"}`} />
+                <item.icon className={`w-5 h-5 ${isActive ? "text-emerald-600 dark:text-emerald-400" : "text-neutral-400 dark:text-neutral-500"}`} />
                 {item.name}
               </Link>
             );
@@ -71,7 +71,7 @@ export function DashboardSidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Dash
             onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-3 w-full text-left rounded-2xl font-medium text-neutral-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
           >
-            <LogOut className="w-5 h-5 text-emerald-500/80 dark:text-[#009966]/80 group-hover:text-red-500" />
+            <LogOut className="w-5 h-5 text-neutral-400 dark:text-neutral-500 group-hover:text-red-500 transition-colors" />
             Log out
           </button>
         </div>
@@ -95,11 +95,11 @@ export function DashboardSidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Dash
                      onClick={() => setIsMobileMenuOpen(false)}
                      className={`flex items-center gap-3 px-4 py-3 rounded-2xl font-medium transition-all ${
                        isActive
-                         ? "bg-emerald-500 dark:bg-[#009966] text-white shadow-md"
+                         ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold shadow-sm ring-1 ring-emerald-500/20 dark:ring-emerald-400/20"
                          : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-neutral-900"
                      }`}
                    >
-                     <item.icon className={`w-5 h-5 ${isActive ? "text-white" : "text-emerald-500/80 dark:text-[#009966]/80"}`} />
+                     <item.icon className={`w-5 h-5 ${isActive ? "text-emerald-600 dark:text-emerald-400" : "text-neutral-400 dark:text-neutral-500"}`} />
                      {item.name}
                    </Link>
                  );
@@ -110,7 +110,7 @@ export function DashboardSidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Dash
                    onClick={handleLogout}
                    className="flex items-center gap-3 px-4 py-3 w-full text-left rounded-2xl font-medium text-neutral-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
                  >
-                   <LogOut className="w-5 h-5 text-emerald-500/80 dark:text-[#009966]/80 group-hover:text-red-500" />
+                   <LogOut className="w-5 h-5 text-neutral-400 dark:text-neutral-500 group-hover:text-red-500 transition-colors" />
                    Log out
                  </button>
                </div>
@@ -121,3 +121,4 @@ export function DashboardSidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Dash
     </>
   );
 }
+
