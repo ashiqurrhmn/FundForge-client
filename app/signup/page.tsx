@@ -68,6 +68,7 @@ export default function SignUpPage() {
       password: formData.password,
       name: formData.name,
       image: formData.profilePictureUrl,
+      role: formData.role,
     });
 
     if (error) {
@@ -82,13 +83,21 @@ export default function SignUpPage() {
     router.push("/dashboard");
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     setIsSubmitting(true);
-    setTimeout(() => {
-      toast.success("Logged in via Google successfully.");
-      setIsSubmitting(false);
-      router.push("/dashboard");
-    }, 1000);
+    const { data, error } = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard"
+    });
+
+    if (error) {
+      setErrors({ ...errors, email: error.message || "Google sign-in failed" });
+      toast.error(error.message || "Google sign-in failed");
+    } else {
+      toast.success("Redirecting to Google...");
+    }
+    
+    setIsSubmitting(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -219,26 +228,34 @@ export default function SignUpPage() {
             )}
           </div>
 
-          {/* Role Selection (Dropdown) */}
+          {/* Role Selection */}
           <div>
-             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5" htmlFor="role">
+             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                Select Role
              </label>
-             <div className="relative">
-               <select
-                 id="role"
-                 name="role"
-                 value={formData.role}
-                 onChange={handleChange}
-                 className="flex h-11 w-full appearance-none rounded-xl border border-neutral-200 dark:border-white/10 bg-white/50 dark:bg-white/5 px-4 py-2 text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all cursor-pointer"
+             <div className="grid grid-cols-2 gap-3">
+               <button
+                 type="button"
+                 onClick={() => setFormData({ ...formData, role: 'supporter' })}
+                 className={`flex items-center justify-center h-11 rounded-xl border text-sm font-medium transition-all ${
+                   formData.role === 'supporter' 
+                     ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 ring-1 ring-emerald-600' 
+                     : 'border-neutral-200 dark:border-white/10 bg-white/50 dark:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-white/10'
+                 }`}
                >
-                 <option value="supporter" className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white">Supporter</option>
-                 <option value="creator" className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white">Creator</option>
-               </select>
-               {/* Custom dropdown arrow */}
-               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-neutral-500 dark:text-neutral-400">
-                 <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
-               </div>
+                 Supporter
+               </button>
+               <button
+                 type="button"
+                 onClick={() => setFormData({ ...formData, role: 'creator' })}
+                 className={`flex items-center justify-center h-11 rounded-xl border text-sm font-medium transition-all ${
+                   formData.role === 'creator' 
+                     ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 ring-1 ring-emerald-600' 
+                     : 'border-neutral-200 dark:border-white/10 bg-white/50 dark:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-white/10'
+                 }`}
+               >
+                 Creator
+               </button>
              </div>
           </div>
 
