@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 
 export const SUPPORTER_SIDEBAR_ITEMS = [
   { name: "Home", href: "/supporter/dashboard", icon: Home },
-  { name: "Explore", href: "/supporter/dashboard/explore", icon: Compass },
+  { name: "Explore", href: "/explore", icon: Compass },
   { name: "My Contributions", href: "/supporter/dashboard/contributions", icon: Heart },
   { name: "Purchase Credit", href: "/supporter/dashboard/credits", icon: CreditCard },
   { name: "Payment History", href: "/supporter/dashboard/payments", icon: ReceiptText },
