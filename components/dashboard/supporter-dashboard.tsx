@@ -123,9 +123,9 @@ export function SupporterDashboard({ user }: { user: any }) {
           </div>
         </div>
 
-        <button className="w-full lg:w-auto bg-emerald-500 dark:bg-[#004F3B] hover:bg-emerald-600 dark:hover:bg-[#008f5d] text-white px-8 py-3.5 rounded-2xl font-bold shadow-lg shadow-emerald-500/30 dark:shadow-[#004F3B]/30 transition-all flex items-center justify-center gap-2">
+        <Link href="/supporter/dashboard/credits" className="w-full lg:w-auto bg-emerald-500 dark:bg-[#004F3B] hover:bg-emerald-600 dark:hover:bg-[#008f5d] text-white px-8 py-3.5 rounded-2xl font-bold shadow-lg shadow-emerald-500/30 dark:shadow-[#004F3B]/30 transition-all flex items-center justify-center gap-2">
           Add Funds <Plus className="w-4 h-4" />
-        </button>
+        </Link>
 
       </div>
 
