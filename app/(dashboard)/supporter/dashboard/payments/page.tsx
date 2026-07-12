@@ -39,8 +39,8 @@ export default function PaymentHistoryPage() {
         setIsLoading(true);
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/payments/${encodeURIComponent(
-            session.user.email
-          )}`
+            session.user.email,
+          )}`,
         );
         const data = await response.json();
 
@@ -67,8 +67,7 @@ export default function PaymentHistoryPage() {
   // Filter payments by search query
   const filteredPayments = payments.filter(
     (p) =>
-      p.transactionId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.packageName.toLowerCase().includes(searchQuery.toLowerCase())
+      p.packageName.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const getStatusIcon = (status: string) => {
@@ -123,11 +122,10 @@ export default function PaymentHistoryPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-white mb-1">
-            Payment History
+            Contribution transactions
           </h1>
           <p className="text-sm text-neutral-400 font-medium">
-            Home /{" "}
-            <span className="text-emerald-500">Payment History</span>
+            Home / <span className="text-emerald-500">Contribution transactions</span>
           </p>
         </div>
 
@@ -136,7 +134,7 @@ export default function PaymentHistoryPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
           <input
             type="text"
-            placeholder="Search by ID or package..."
+            placeholder="Search by package..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 pr-4 py-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-sm font-medium text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400 transition-all w-full sm:w-64"
@@ -217,9 +215,6 @@ export default function PaymentHistoryPage() {
                 <thead>
                   <tr className="border-b border-neutral-100 dark:border-neutral-800">
                     <th className="text-left text-xs font-bold text-neutral-400 uppercase tracking-wider px-6 py-4">
-                      Transaction ID
-                    </th>
-                    <th className="text-left text-xs font-bold text-neutral-400 uppercase tracking-wider px-6 py-4">
                       Package
                     </th>
                     <th className="text-left text-xs font-bold text-neutral-400 uppercase tracking-wider px-6 py-4">
@@ -246,11 +241,6 @@ export default function PaymentHistoryPage() {
                           : ""
                       }`}
                     >
-                      <td className="px-6 py-4">
-                        <span className="text-sm font-mono text-neutral-600 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded">
-                          {payment.transactionId.slice(0, 20)}...
-                        </span>
-                      </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <CreditCard className="w-4 h-4 text-emerald-500" />
@@ -279,7 +269,7 @@ export default function PaymentHistoryPage() {
                               day: "numeric",
                               hour: "2-digit",
                               minute: "2-digit",
-                            }
+                            },
                           )}
                         </span>
                       </td>
@@ -328,18 +318,15 @@ export default function PaymentHistoryPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-neutral-400 pt-2 border-t border-neutral-200 dark:border-neutral-700">
-                    <span className="font-mono">
-                      {payment.transactionId.slice(0, 16)}...
-                    </span>
-                    <span>
+                  <div className="pt-2 border-t border-neutral-200 dark:border-neutral-700 text-right">
+                    <span className="text-xs text-neutral-400">
                       {new Date(payment.paymentDate).toLocaleDateString(
                         "en-US",
                         {
                           month: "short",
                           day: "numeric",
                           year: "numeric",
-                        }
+                        },
                       )}
                     </span>
                   </div>
