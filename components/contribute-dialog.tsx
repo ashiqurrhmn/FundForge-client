@@ -240,12 +240,13 @@ export function ContributeDialog({
                 <>
                   {/* ── Header ── */}
                   <div className="relative bg-gradient-to-br from-emerald-500 to-teal-600 dark:from-emerald-600 dark:to-teal-700 px-6 py-5 text-white">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10" />
-                    <div className="absolute bottom-0 left-0 w-20 h-20 bg-black/5 rounded-full -ml-5 -mb-5" />
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 w-20 h-20 bg-black/5 rounded-full -ml-5 -mb-5 pointer-events-none" />
 
                     <button
+                      type="button"
                       onClick={onClose}
-                      className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
+                      className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-20 cursor-pointer"
                     >
                       <X className="w-4 h-4" />
                     </button>

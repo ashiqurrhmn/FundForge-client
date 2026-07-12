@@ -77,8 +77,9 @@ export default function Home() {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns`);
         const json = await res.json();
         if (json.success) {
-          // Take top 8 campaigns for featured
-          setCampaigns(json.data.slice(0, 8));
+          // Sort by raisedCredits and take top 5 for featured
+          const sorted = json.data.sort((a: any, b: any) => (b.raisedCredits || 0) - (a.raisedCredits || 0));
+          setCampaigns(sorted.slice(0, 5));
         }
       } catch (err) {
         console.error("Failed to fetch featured campaigns", err);

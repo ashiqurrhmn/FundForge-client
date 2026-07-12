@@ -7,48 +7,51 @@ import { useState, useEffect } from "react";
 import { ManageProfileModal } from "./manage-profile-modal";
 import { CampaignCardSkeleton } from "@/components/skeletons/campaign-card-skeleton";
 
-// Mock Data
-const MOCK_METRICS = {
-  totalRaised: "$145,000",
-  totalBackers: "1,240",
-  activeCampaigns: "2",
-  totalViews: "45.8k",
-  raisedTrend: "+12%",
-  viewsTrend: "+24%",
-};
-
-
-
-const RECENT_BACKERS = [
-  { id: 101, name: "Sarah J.", amount: 50, campaign: "Eco-Friendly Water Filtration", time: "2 hours ago", avatar: "https://i.pravatar.cc/150?u=sarah" },
-  { id: 102, name: "Michael T.", amount: 120, campaign: "Eco-Friendly Water Filtration", time: "5 hours ago", avatar: "https://i.pravatar.cc/150?u=michael" },
-  { id: 103, name: "Anonymous", amount: 25, campaign: "Eco-Friendly Water Filtration", time: "1 day ago", avatar: null },
-  { id: 104, name: "Elena R.", amount: 500, campaign: "Solar-Powered Community Garden", time: "2 days ago", avatar: "https://i.pravatar.cc/150?u=elena" },
-];
+import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export function CreatorDashboard({ user }: { user: any }) {
   const [isManageProfileOpen, setIsManageProfileOpen] = useState(false);
   const [campaigns, setCampaigns] = useState<any[]>([]);
+  const [dashboardData, setDashboardData] = useState<any>(null);
   const [isLoadingCampaigns, setIsLoadingCampaigns] = useState(true);
 
   useEffect(() => {
-    if (user?.id) {
-      const fetchCampaigns = async () => {
+    if (user?.email) {
+      const fetchDashboardData = async () => {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/creator/${user.id}`);
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/creator/dashboard/${user.email}`);
           const data = await res.json();
           if (data.success) {
-            setCampaigns(data.data);
+            setDashboardData(data.data);
+            
+            // Also fetch campaigns from existing endpoint for the list
+            const campaignRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/creator/${user.id}`);
+            const campaignData = await campaignRes.json();
+            if (campaignData.success) {
+              setCampaigns(campaignData.data);
+            }
           }
         } catch (error) {
-          console.error("Failed to fetch campaigns:", error);
+          console.error("Failed to fetch dashboard data:", error);
         } finally {
           setIsLoadingCampaigns(false);
         }
       };
-      fetchCampaigns();
+      fetchDashboardData();
     }
   }, [user]);
+
+  const metrics = dashboardData?.metrics || {
+    totalRaised: 0,
+    totalBackers: 0,
+    activeCampaigns: 0,
+    totalViews: 0,
+    raisedTrend: "+0%",
+    viewsTrend: "+0%"
+  };
+
+  const recentBackers = dashboardData?.recentBackers || [];
+  const chartData = dashboardData?.chartData || [];
 
   return (
     <div className="p-6 md:p-8 w-full">
@@ -83,11 +86,11 @@ export function CreatorDashboard({ user }: { user: any }) {
               <DollarSign className="w-6 h-6" />
             </div>
             <span className="text-xs font-bold text-emerald-500 dark:text-[#004F3B] flex items-center gap-1 bg-emerald-50 dark:bg-[#004F3B]/20 px-2 py-0.5 rounded-full">
-              <TrendingUp className="w-3 h-3" /> {MOCK_METRICS.raisedTrend}
+              <TrendingUp className="w-3 h-3" /> {metrics.raisedTrend}
             </span>
           </div>
           <p className="text-sm text-neutral-400 font-medium mb-1">Total Raised</p>
-          <h3 className="text-2xl font-black text-neutral-800 dark:text-white">{MOCK_METRICS.totalRaised}</h3>
+          <h3 className="text-2xl font-black text-neutral-800 dark:text-white">{metrics.totalRaised.toLocaleString()} Cr</h3>
         </div>
 
         <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
@@ -97,7 +100,7 @@ export function CreatorDashboard({ user }: { user: any }) {
             </div>
           </div>
           <p className="text-sm text-neutral-400 font-medium mb-1">Total Backers</p>
-          <h3 className="text-2xl font-black text-neutral-800 dark:text-white">{MOCK_METRICS.totalBackers}</h3>
+          <h3 className="text-2xl font-black text-neutral-800 dark:text-white">{metrics.totalBackers.toLocaleString()}</h3>
         </div>
 
         <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 shadow-[0_2px_20px_rgb(0,0,0,0.04)]">
@@ -107,13 +110,13 @@ export function CreatorDashboard({ user }: { user: any }) {
             </div>
           </div>
           <p className="text-sm text-neutral-400 font-medium mb-1">Active Campaigns</p>
-          <h3 className="text-2xl font-black text-neutral-800 dark:text-white">{MOCK_METRICS.activeCampaigns}</h3>
+          <h3 className="text-2xl font-black text-neutral-800 dark:text-white">{metrics.activeCampaigns}</h3>
         </div>
 
         <div className="bg-emerald-500 dark:bg-[#004F3B] rounded-3xl p-6 shadow-lg shadow-emerald-500/20 dark:shadow-[#004F3B]/20 relative overflow-hidden flex flex-col justify-center text-white">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
           <p className="text-sm text-emerald-50 font-medium mb-1 relative z-10">Total Views</p>
-          <h3 className="text-2xl font-black mb-4 relative z-10">{MOCK_METRICS.totalViews}</h3>
+          <h3 className="text-2xl font-black mb-4 relative z-10">{metrics.totalViews.toLocaleString()}</h3>
           <Link href="/creator/dashboard/create" className="bg-white text-emerald-600 dark:text-[#004F3B] py-2.5 rounded-xl font-bold text-sm hover:bg-emerald-50 dark:hover:bg-white/90 transition-colors flex items-center justify-center gap-2 relative z-10">
             Add New Campaign <PlusCircle className="w-4 h-4" />
           </Link>
@@ -149,7 +152,10 @@ export function CreatorDashboard({ user }: { user: any }) {
                     Create One Now
                   </Link>
                 </div>
-              ) : campaigns.slice(0, 3).map(campaign => {
+              ) : [...campaigns]
+                  .sort((a, b) => (b.raisedCredits || 0) - (a.raisedCredits || 0))
+                  .slice(0, 3)
+                  .map(campaign => {
                 const raised = campaign.raisedCredits || 0;
                 const percentFunded = Math.min(100, Math.round((raised / campaign.funding_goal) * 100));
                 const isActive = campaign.status === "approved";
@@ -219,7 +225,7 @@ export function CreatorDashboard({ user }: { user: any }) {
                  <h3 className="text-base font-bold text-neutral-800 dark:text-white">Recent Backers</h3>
               </div>
               <div className="space-y-4">
-                 {RECENT_BACKERS.map(backer => (
+                 {recentBackers.length > 0 ? recentBackers.map((backer: any) => (
                    <div key={backer.id} className="flex items-start gap-3 p-3 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
                       <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-800 shrink-0 overflow-hidden flex items-center justify-center">
                          {backer.avatar ? (
@@ -231,13 +237,17 @@ export function CreatorDashboard({ user }: { user: any }) {
                       <div className="flex-1 min-w-0">
                          <div className="flex justify-between items-start mb-0.5">
                             <p className="text-sm font-bold text-neutral-800 dark:text-white truncate">{backer.name}</p>
-                            <span className="text-sm font-black text-emerald-500 dark:text-[#004F3B]">+${backer.amount}</span>
+                            <span className="text-sm font-black text-emerald-500 dark:text-[#004F3B]">+{backer.amount} Cr</span>
                          </div>
                          <p className="text-[10px] text-neutral-500 truncate mb-1">Backed: {backer.campaign}</p>
                          <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">{backer.time}</p>
                       </div>
                    </div>
-                 ))}
+                 )) : (
+                   <div className="text-center py-6">
+                     <p className="text-sm text-neutral-500">No backers yet.</p>
+                   </div>
+                 )}
                  
                  <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800 text-center">
                     <button className="text-xs font-bold text-emerald-500 dark:text-[#004F3B] hover:underline">View All Activity</button>
@@ -259,6 +269,58 @@ export function CreatorDashboard({ user }: { user: any }) {
            </div>
         </div>
 
+      </div>
+
+      {/* 4. Funding History Chart */}
+      <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 md:p-8 shadow-[0_2px_20px_rgb(0,0,0,0.04)] mb-8">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h3 className="text-lg font-bold text-neutral-800 dark:text-white mb-1">Funding History</h3>
+            <p className="text-xs text-neutral-400">Your total raised funds over the last 6 months</p>
+          </div>
+          <div className="flex gap-2">
+            <span className="px-3 py-1 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-xs font-bold text-neutral-600 dark:text-neutral-300">6 Months</span>
+          </div>
+        </div>
+
+        <div className="h-[250px] md:h-[300px] w-full mt-4">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={chartData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
+              <defs>
+                <linearGradient id="colorImpact" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <XAxis 
+                dataKey="month" 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fontSize: 12, fill: '#9ca3af', fontWeight: 600 }}
+                dy={10}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  borderRadius: '16px', 
+                  border: 'none', 
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                  fontWeight: 'bold',
+                  padding: '12px 16px'
+                }}
+                itemStyle={{ color: '#10b981', fontWeight: 900 }}
+                formatter={(value: number) => [`${value.toLocaleString()} Cr`, 'Raised']}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="impact" 
+                stroke="#10b981" 
+                strokeWidth={3}
+                fillOpacity={1} 
+                fill="url(#colorImpact)" 
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Footer */}
