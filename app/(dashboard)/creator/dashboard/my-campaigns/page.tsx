@@ -18,6 +18,8 @@ interface Campaign {
   deadline: string;
   status: string;
   campaign_image_url: string;
+  raisedCredits?: number;
+  backers?: number;
 }
 
 export default function MyCampaignsPage() {
@@ -200,7 +202,7 @@ export default function MyCampaignsPage() {
               <div className="flex flex-col gap-6 p-6">
                 {filteredAndSortedCampaigns.map((campaign) => {
                   const daysLeft = getDaysLeft(campaign.deadline);
-                  const raised = 0; // Mock data
+                  const raised = campaign.raisedCredits || 0;
                   const progressPercentage = Math.min(Math.round((raised / campaign.funding_goal) * 100), 100);
 
                   return (
@@ -229,7 +231,7 @@ export default function MyCampaignsPage() {
                             </span>
                           </div>
                           <div className="flex items-center gap-4 text-sm text-emerald-600 dark:text-emerald-500 font-medium mb-4">
-                            <span className="flex items-center gap-1.5"><Users className="w-4 h-4"/> 0 Backers</span>
+                            <span className="flex items-center gap-1.5"><Users className="w-4 h-4"/> {campaign.backers || 0} Backers</span>
                             <span className="flex items-center gap-1.5"><Radio className="w-4 h-4"/> 0 Updates</span>
                           </div>
                         </div>

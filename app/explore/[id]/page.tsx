@@ -29,6 +29,7 @@ interface Campaign {
   funding_goal: number;
   minimum_contribution?: number;
   raisedCredits?: number;
+  backers?: number;
   deadline: string;
   status: string;
   creator_name: string;
@@ -86,7 +87,7 @@ export default function CampaignDetailsPage() {
 
   const getFundedPercent = () => {
     if (!campaign) return 0;
-    return Math.min(100, Math.round((0 / campaign.funding_goal) * 100));
+    return Math.min(100, Math.round(((campaign.raisedCredits || 0) / campaign.funding_goal) * 100));
   };
 
   // ── Loading Skeleton ──
@@ -214,7 +215,7 @@ export default function CampaignDetailsPage() {
             {/* Stats row */}
             <div className="grid grid-cols-3 gap-4">
               {[
-                { icon: Users, label: "Backers", value: "0", color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-500/10" },
+                { icon: Users, label: "Backers", value: `${campaign.backers || 0}`, color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-500/10" },
                 { icon: TrendingUp, label: "Funded", value: `${fundedPercent}%`, color: "text-emerald-500", bg: "bg-emerald-50 dark:bg-emerald-500/10" },
                 { icon: Clock, label: "Days Left", value: isExpired ? "Ended" : `${daysLeft}`, color: "text-amber-500", bg: "bg-amber-50 dark:bg-amber-500/10" },
               ].map(({ icon: Icon, label, value, color, bg }) => (
@@ -320,7 +321,7 @@ export default function CampaignDetailsPage() {
                 </div>
                 <div className="flex justify-between text-xs font-bold text-neutral-500 mb-6">
                   <span className="text-emerald-500">{fundedPercent}% funded</span>
-                  <span>0 Cr raised</span>
+                  <span>{(campaign.raisedCredits || 0).toLocaleString()} Cr raised</span>
                 </div>
 
                 {/* Info tiles */}

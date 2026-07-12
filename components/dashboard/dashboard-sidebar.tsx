@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Compass, Heart, CreditCard, ReceiptText, LogOut, X, PlusCircle, Layers, Landmark, ShieldCheck, Users, PieChart, ChevronLeft, ChevronRight, GripVertical } from "lucide-react";
+import { Home, Compass, Heart, CreditCard, ReceiptText, LogOut, X, PlusCircle, Layers, Landmark, ShieldCheck, Users, PieChart, ChevronLeft, ChevronRight, GripVertical, HandCoins } from "lucide-react";
 import { authClient, useSession } from "@/app/lib/auth-client";
 import { useRouter } from "next/navigation";
 
@@ -22,6 +22,7 @@ export const CREATOR_SIDEBAR_ITEMS = [
   { name: "Home", href: "/creator/dashboard", icon: Home },
   { name: "Add New Campaign", href: "/creator/dashboard/create", icon: PlusCircle },
   { name: "My Campaigns", href: "/creator/dashboard/my-campaigns", icon: Layers },
+  { name: "Contributions", href: "/creator/dashboard/contributions", icon: HandCoins },
   { name: "Withdrawals", href: "/creator/dashboard/withdrawals", icon: Landmark },
   { name: "Payment History", href: "/creator/dashboard/payments", icon: ReceiptText },
 ];

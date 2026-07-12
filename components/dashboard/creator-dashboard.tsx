@@ -150,7 +150,7 @@ export function CreatorDashboard({ user }: { user: any }) {
                   </Link>
                 </div>
               ) : campaigns.slice(0, 3).map(campaign => {
-                const raised = 0; // Mock data since no actual donations exist
+                const raised = campaign.raisedCredits || 0;
                 const percentFunded = Math.min(100, Math.round((raised / campaign.funding_goal) * 100));
                 const isActive = campaign.status === "approved";
                 
@@ -174,7 +174,7 @@ export function CreatorDashboard({ user }: { user: any }) {
                       <div>
                         <h4 className="font-bold text-base text-neutral-800 dark:text-white mb-2 line-clamp-2">{campaign.campaign_title}</h4>
                         <div className="flex gap-4 text-xs font-bold text-neutral-500 dark:text-neutral-400 mb-4">
-                           <span className="flex items-center gap-1 text-emerald-500 dark:text-[#004F3B]"><Users className="w-3.5 h-3.5"/> 0 Backers</span>
+                           <span className="flex items-center gap-1 text-emerald-500 dark:text-[#004F3B]"><Users className="w-3.5 h-3.5"/> {campaign.backers || 0} Backers</span>
                            <span className="flex items-center gap-1"><Target className="w-3.5 h-3.5"/> 0 Updates</span>
                         </div>
                       </div>
