@@ -15,6 +15,7 @@ interface Campaign {
   funding_goal: number;
   deadline: string;
   status: string;
+  description?: string;
 }
 
 const getGridClasses = (index: number) => {
