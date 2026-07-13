@@ -3,7 +3,8 @@ import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { jwt } from "better-auth/plugins";
 
-const client = new MongoClient(process.env.MONGODB_URI as string);
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/dummy";
+const client = new MongoClient(uri);
 const db = client.db("fundforge");
 
 export const auth = betterAuth({
