@@ -15,7 +15,7 @@ export const SUPPORTER_SIDEBAR_ITEMS = [
   { name: "Explore", href: "/explore", icon: Compass },
   { name: "My Contributions", href: "/supporter/dashboard/contributions", icon: Heart },
   { name: "Purchase Credit", href: "/supporter/dashboard/credits", icon: CreditCard },
-  { name: "Contribution transactions", href: "/supporter/dashboard/payments", icon: ReceiptText },
+  { name: "Payment History", href: "/supporter/dashboard/payments", icon: ReceiptText },
 ];
 
 export const CREATOR_SIDEBAR_ITEMS = [
@@ -24,7 +24,7 @@ export const CREATOR_SIDEBAR_ITEMS = [
   { name: "My Campaigns", href: "/creator/dashboard/my-campaigns", icon: Layers },
   { name: "Contributions", href: "/creator/dashboard/contributions", icon: HandCoins },
   { name: "Withdrawals", href: "/creator/dashboard/withdrawals", icon: Landmark },
-  { name: "Contribution transactions", href: "/creator/dashboard/payments", icon: ReceiptText },
+  { name: "Payment History", href: "/creator/dashboard/payments", icon: ReceiptText },
 ];
 
 export const ADMIN_SIDEBAR_ITEMS = [
@@ -32,7 +32,7 @@ export const ADMIN_SIDEBAR_ITEMS = [
   { name: "Manage Users", href: "/admin/dashboard/users", icon: Users },
   { name: "Manage Campaigns", href: "/admin/dashboard/campaigns", icon: ShieldCheck },
   { name: "Withdrawal Requests", href: "/admin/dashboard/withdrawals", icon: Landmark },
-  { name: "Contribution transactions", href: "/admin/dashboard/payments", icon: ReceiptText },
+  { name: "Payment History", href: "/admin/dashboard/payments", icon: ReceiptText },
   { name: "Supporter Purchases", href: "/admin/dashboard/purchases", icon: CreditCard },
   { name: "Reports", href: "/admin/dashboard/reports", icon: PieChart },
 ];

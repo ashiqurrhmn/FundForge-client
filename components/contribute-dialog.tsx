@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -134,7 +135,7 @@ export function ContributeDialog({
     setError("");
 
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}/api/contributions`,
         {
           method: "POST",

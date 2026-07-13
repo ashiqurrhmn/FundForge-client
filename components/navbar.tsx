@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Search, Menu, X, Flame, Bell, User, PlusCircle, Compass, LogOut } from "lucide-react";
 import { useSession, signOut } from "@/app/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { NotificationsDropdown } from "./notifications-dropdown";
 
 export function Navbar() {
   const { data, isPending} = useSession()
@@ -89,10 +90,7 @@ export function Navbar() {
           
           {isLoggedIn ? (
              <div className="flex items-center gap-4">
-                <button className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors relative">
-                   <Bell className="w-5 h-5" />
-                   <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-emerald-600 text-[9px] font-bold text-white ring-2 ring-white dark:ring-neutral-950">2</span>
-                </button>
+                <NotificationsDropdown isMobile={false} />
                 <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium border border-neutral-200 dark:border-neutral-800 rounded-full py-1.5 px-3 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-white transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800">
                   {user.image ? (
                     <img src={user.image} alt={user.name} className="w-4 h-4 rounded-full object-cover" />
@@ -172,12 +170,7 @@ export function Navbar() {
           <div className="border-t border-neutral-200 dark:border-neutral-800 pt-4">
              {isLoggedIn ? (
                <div className="flex flex-col gap-1">
-                  <Link href="/notifications" className="flex items-center justify-between text-sm font-medium px-3 py-2.5 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 rounded-lg transition-colors">
-                     <div className="flex items-center gap-3">
-                        <Bell className="w-5 h-5 text-neutral-500" /> Notifications
-                     </div>
-                     <span className="bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-500 text-xs font-bold px-2 py-0.5 rounded-full">2</span>
-                  </Link>
+                  <NotificationsDropdown isMobile={true} />
                   <Link href="/dashboard" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 text-sm font-medium px-3 py-2.5 text-neutral-900 dark:text-white bg-neutral-50 dark:bg-neutral-900 rounded-lg transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800">
                     {user.image ? (
                       <img src={user.image} alt={user.name} className="w-5 h-5 rounded-full object-cover" />

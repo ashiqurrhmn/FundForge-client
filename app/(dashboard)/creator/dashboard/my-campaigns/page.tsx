@@ -1,5 +1,7 @@
 "use client";
 
+import { createPortal } from "react-dom";
+
 import { useEffect, useState, useMemo } from "react";
 import { useSession } from "@/app/lib/auth-client";
 import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
@@ -31,12 +33,14 @@ export default function MyCampaignsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [campaignToDelete, setCampaignToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState("nearest-deadline");
 
   useEffect(() => {
+    setMounted(true);
     if (!isPending && !session) {
       router.push("/login");
     }
@@ -276,9 +280,10 @@ export default function MyCampaignsPage() {
         </motion.div>
       </div>
 
-      <AnimatePresence>
-        {campaignToDelete && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {mounted && typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
+          {campaignToDelete && (
+            <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -317,8 +322,10 @@ export default function MyCampaignsPage() {
               </div>
             </motion.div>
           </div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }

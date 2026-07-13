@@ -286,7 +286,7 @@ export function SupporterDashboard({ user }: { user: any }) {
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
                   itemStyle={{ color: '#10b981', fontWeight: 'bold' }}
                   labelStyle={{ fontWeight: 'bold', color: '#333' }}
-                  formatter={(value: number) => [`${value} Cr`, 'Impact']}
+                  formatter={(value: any) => [`${value} Cr`, 'Impact']}
                 />
                 <Area type="monotone" dataKey="amount" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorAmount)" />
               </AreaChart>

@@ -55,7 +55,7 @@ export default function LoginPage() {
 
     toast.success("Successfully logged in.");
     setIsSubmitting(false);
-    router.push("/dashboard");
+    window.location.href = "/dashboard";
   };
 
   const handleGoogleLogin = async () => {

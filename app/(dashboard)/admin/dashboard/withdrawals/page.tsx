@@ -1,5 +1,7 @@
 "use client";
 
+import { createPortal } from "react-dom";
+
 import { useState, useEffect } from "react";
 import { useSession } from "@/app/lib/auth-client";
 import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
@@ -39,6 +41,7 @@ export default function AdminWithdrawalsPage() {
   const [transactionRef, setTransactionRef] = useState("");
   const [adminNote, setAdminNote] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const fetchWithdrawals = async () => {
     try {
@@ -53,6 +56,7 @@ export default function AdminWithdrawalsPage() {
   };
 
   useEffect(() => {
+    setMounted(true);
     fetchWithdrawals();
   }, []);
 
@@ -264,21 +268,22 @@ export default function AdminWithdrawalsPage() {
       </div>
 
       {/* Action Modal */}
-      <AnimatePresence>
-        {actionModal && (
+      {mounted && typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
+          {actionModal && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActionModal(null)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999]"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+              className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
             >
               <div className="relative w-full max-w-md bg-white dark:bg-neutral-900 rounded-3xl shadow-2xl border border-neutral-100 dark:border-neutral-800 overflow-hidden" onClick={(e) => e.stopPropagation()}>
                 {/* Header */}
@@ -358,7 +363,9 @@ export default function AdminWithdrawalsPage() {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
+      )}
     </div>
   );
 }

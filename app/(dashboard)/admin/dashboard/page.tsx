@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ManageProfileModal } from "@/components/dashboard/manage-profile-modal";
 import { DashboardSkeleton } from "@/components/skeletons/dashboard-skeleton";
+import toast from "react-hot-toast";
 
 export default function AdminDashboardPage() {
   const { data: session, isPending } = useSession();
@@ -34,6 +35,7 @@ export default function AdminDashboardPage() {
             }
           } catch (error) {
             console.error("Failed to fetch admin stats:", error);
+            toast.error("Failed to load dashboard stats");
           } finally {
             setIsLoadingStats(false);
           }

@@ -1,5 +1,7 @@
 "use client";
 
+import { createPortal } from "react-dom";
+
 import { useEffect, useState, useMemo } from "react";
 import { useSession } from "@/app/lib/auth-client";
 import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
@@ -47,6 +49,7 @@ export default function CreatorContributionsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [processingId, setProcessingId] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   // Confirm dialog state
   const [confirmAction, setConfirmAction] = useState<{
@@ -58,6 +61,7 @@ export default function CreatorContributionsPage() {
   } | null>(null);
 
   useEffect(() => {
+    setMounted(true);
     if (!isPending && !session) {
       router.push("/login");
     }
@@ -505,22 +509,23 @@ export default function CreatorContributionsPage() {
       )}
 
       {/* Confirm Action Modal */}
-      <AnimatePresence>
-        {confirmAction && (
+      {mounted && typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
+          {confirmAction && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setConfirmAction(null)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999]"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+              className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
             >
               <div
                 className="w-full max-w-md bg-white dark:bg-neutral-900 rounded-3xl shadow-2xl border border-neutral-100 dark:border-neutral-800 overflow-hidden"
@@ -629,7 +634,9 @@ export default function CreatorContributionsPage() {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
+      )}
     </div>
   );
 }

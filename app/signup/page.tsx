@@ -70,7 +70,7 @@ export default function SignUpPage() {
       name: formData.name,
       image: formData.profilePictureUrl,
       role: formData.role,
-    });
+    } as any);
 
     if (error) {
       setErrors({
@@ -84,7 +84,7 @@ export default function SignUpPage() {
 
     toast.success("Your account has been successfully created.");
     setIsSubmitting(false);
-    router.push("/dashboard");
+    window.location.href = "/dashboard";
   };
 
   const handleGoogleLogin = async () => {

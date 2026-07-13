@@ -79,6 +79,7 @@ export function CheckoutForm({
         }
 
         toast.success(`🎉 ${credits.toLocaleString()} credits added!`, { duration: 4000 });
+        window.dispatchEvent(new Event("refresh-notifications"));
         router.push("/supporter/dashboard/payments");
       }
     } catch {
