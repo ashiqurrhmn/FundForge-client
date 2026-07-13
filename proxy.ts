@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const url = request.nextUrl.clone();
   const path = url.pathname;
 
@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/unauthorized", request.url));
       }
     } catch (e) {
-      console.error("Middleware auth check failed:", e);
+      console.error("Proxy auth check failed:", e);
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Specify the paths the middleware should run on
+// Specify the paths the proxy should run on
 export const config = {
   matcher: [
     '/admin/:path*',

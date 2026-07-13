@@ -120,7 +120,7 @@ export function NotificationsDropdown({ isMobile = false, isDashboardHeader = fa
     setIsOpen(false);
     
     const t = n.title.toLowerCase();
-    const role = session?.user?.role || "";
+    const role = (session?.user as any)?.role || "";
 
     if (role === "admin") {
       if (t.includes("withdrawal")) return router.push("/admin/dashboard/withdrawals");
