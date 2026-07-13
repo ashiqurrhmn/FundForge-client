@@ -73,8 +73,8 @@ const SLIDE_DURATION = 7000;
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [campaigns, setCampaigns] = useState([]);
-  const [allCampaigns, setAllCampaigns] = useState([]);
+  const [campaigns, setCampaigns] = useState<any[]>([]);
+  const [allCampaigns, setAllCampaigns] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchCampaigns = async () => {

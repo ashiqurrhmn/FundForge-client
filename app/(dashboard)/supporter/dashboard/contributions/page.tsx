@@ -38,6 +38,10 @@ export default function MyContributionsPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"All" | "Pending" | "Approved" | "Rejected">("All");
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   useEffect(() => {
     const fetchContributions = async () => {
       try {
@@ -62,12 +66,23 @@ export default function MyContributionsPage() {
     }
   }, [session]);
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, statusFilter]);
+
   const filteredContributions = contributions.filter(c => {
     const matchesSearch = c.campaignTitle?.toLowerCase().includes(search.toLowerCase()) || 
                           c.campaign?.category?.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === "All" || c.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  const totalPages = Math.ceil(filteredContributions.length / itemsPerPage);
+  const paginatedContributions = filteredContributions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const totalImpact = contributions.filter(c => c.status === "Approved").reduce((sum, c) => sum + (c.amount || 0), 0);
   const pendingImpact = contributions.filter(c => c.status === "Pending").reduce((sum, c) => sum + (c.amount || 0), 0);
@@ -199,7 +214,7 @@ export default function MyContributionsPage() {
       ) : (
         <div className="space-y-4">
           <AnimatePresence>
-            {filteredContributions.map(contribution => {
+            {paginatedContributions.map(contribution => {
               const Icon = StatusIcon[contribution.status];
               
               return (
@@ -274,6 +289,29 @@ export default function MyContributionsPage() {
               );
             })}
           </AnimatePresence>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-8 pt-4">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-6 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 disabled:opacity-50 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors font-medium text-sm text-neutral-700 dark:text-neutral-300"
+              >
+                Previous
+              </button>
+              <span className="text-sm font-medium text-neutral-500">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-6 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 disabled:opacity-50 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors font-medium text-sm text-neutral-700 dark:text-neutral-300"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
