@@ -32,9 +32,7 @@ export default function SignUpPage() {
       newErrors.email = "Please enter a valid email address";
     }
 
-    if (!formData.profilePictureUrl.trim()) {
-      newErrors.profilePictureUrl = "Profile Picture URL is required";
-    } else {
+    if (formData.profilePictureUrl.trim()) {
       try {
         new URL(formData.profilePictureUrl);
       } catch (_) {
@@ -209,7 +207,7 @@ export default function SignUpPage() {
               className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5"
               htmlFor="profilePictureUrl"
             >
-              Profile Picture URL
+              Profile Picture URL <span className="text-neutral-400 font-normal text-xs">(Optional)</span>
             </label>
             <input
               id="profilePictureUrl"
