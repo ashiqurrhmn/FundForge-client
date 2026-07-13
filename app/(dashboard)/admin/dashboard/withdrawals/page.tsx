@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { Toaster, toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -41,7 +42,7 @@ export default function AdminWithdrawalsPage() {
 
   const fetchWithdrawals = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/admin`);
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/admin`);
       const data = await res.json();
       if (data.success) setWithdrawals(data.data);
     } catch (err) {
@@ -59,7 +60,7 @@ export default function AdminWithdrawalsPage() {
     if (!actionModal) return;
     setIsProcessing(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/${actionModal.withdrawal._id}/status`, {
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/${actionModal.withdrawal._id}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

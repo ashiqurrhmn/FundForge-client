@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { motion } from "framer-motion";
 import { Upload, Loader2, ArrowLeft, Image as ImageIcon } from "lucide-react";
 import toast from "react-hot-toast";
@@ -42,7 +43,7 @@ export default function EditCampaignPage() {
     if (session && id) {
       const fetchCampaign = async () => {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/${id}`);
+          const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/${id}`);
           const data = await res.json();
           if (data.success) {
             const campaign = data.data;
@@ -124,7 +125,7 @@ export default function EditCampaignPage() {
         campaign_image_url,
       };
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/${id}`, {
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)

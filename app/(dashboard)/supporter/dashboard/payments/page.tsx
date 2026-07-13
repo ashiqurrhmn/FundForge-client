@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import type { PaymentRecord } from "@/app/lib/types";
 import {
   ReceiptText,
@@ -37,7 +38,7 @@ export default function PaymentHistoryPage() {
 
       try {
         setIsLoading(true);
-        const response = await fetch(
+        const response = await fetchWithAuth(
           `${process.env.NEXT_PUBLIC_API_URL}/api/payments/${encodeURIComponent(
             session.user.email,
           )}`,

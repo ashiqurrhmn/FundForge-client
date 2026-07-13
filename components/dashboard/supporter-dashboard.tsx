@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Edit2, TrendingUp, TrendingDown, Plus, Heart, Star, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ManageProfileModal } from "./manage-profile-modal";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export function SupporterDashboard({ user }: { user: any }) {
@@ -16,7 +17,7 @@ export function SupporterDashboard({ user }: { user: any }) {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/supporter/dashboard/${user.email}`);
+        const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/supporter/dashboard/${user.email}`);
         const json = await res.json();
         if (json.success) {
           setDashboardData(json.data);

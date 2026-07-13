@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { motion, AnimatePresence } from "framer-motion";
 import { Upload, Loader2, ArrowLeft, Image as ImageIcon } from "lucide-react";
 import toast from "react-hot-toast";
@@ -11,6 +12,7 @@ import Link from "next/link";
 
 export default function CreateCampaignPage() {
   const { data: session, isPending } = useSession();
+  
   const router = useRouter();
   
   const [formData, setFormData] = useState({
@@ -93,7 +95,7 @@ export default function CreateCampaignPage() {
         createdAt: new Date().toISOString()
       };
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns`, {
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)

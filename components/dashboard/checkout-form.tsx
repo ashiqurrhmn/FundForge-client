@@ -9,6 +9,7 @@ import {
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Loader2, Lock, ShieldCheck } from "lucide-react";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 
 interface CheckoutFormProps {
   packageName: string;
@@ -54,7 +55,7 @@ export function CheckoutForm({
       }
 
       if (paymentIntent?.status === "succeeded") {
-        const saveResponse = await fetch(
+        const saveResponse = await fetchWithAuth(
           `${process.env.NEXT_PUBLIC_API_URL}/api/payments`,
           {
             method: "POST",

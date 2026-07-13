@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { Toaster, toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -52,8 +53,8 @@ export default function WithdrawalsPage() {
     if (!session?.user?.email) return;
     try {
       const [balanceRes, historyRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/balance/${session.user.email}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/creator/${session.user.email}`),
+        fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/balance/${session.user.email}`),
+        fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/creator/${session.user.email}`),
       ]);
       const balanceData = await balanceRes.json();
       const historyData = await historyRes.json();
@@ -89,7 +90,7 @@ export default function WithdrawalsPage() {
 
     setIsSubmitting(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals`, {
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -119,7 +120,7 @@ export default function WithdrawalsPage() {
   const handleCancel = async (id: string) => {
     if (!session?.user?.email) return;
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/${id}/cancel`, {
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/${id}/cancel`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: session.user.email }),

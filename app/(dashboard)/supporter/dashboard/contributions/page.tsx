@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HandCoins, Search, Heart, Clock, CheckCircle2, XCircle, ChevronRight, LayoutList, Grip } from "lucide-react";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { Toaster, toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -40,7 +41,7 @@ export default function MyContributionsPage() {
   useEffect(() => {
     const fetchContributions = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/contributions/supporter/${session?.user?.email}`);
+        const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/contributions/supporter/${session?.user?.email}`);
         const json = await res.json();
         
         if (json.success) {

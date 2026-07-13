@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { useTheme } from "next-themes";
 import { Elements } from "@stripe/react-stripe-js";
 import { stripePromise } from "@/app/lib/stripe";
@@ -82,7 +83,7 @@ export default function PurchaseCreditsPage() {
     setIsCreatingIntent(true);
 
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}/api/create-payment-intent`,
         {
           method: "POST",

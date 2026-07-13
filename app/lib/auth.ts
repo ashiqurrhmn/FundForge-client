@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { jwt } from "better-auth/plugins";
 
 const client = new MongoClient(process.env.MONGODB_URI as string);
 const db = client.db("fundforge");
@@ -61,5 +62,15 @@ export const auth = betterAuth({
         }
       }
     }
-  }
+  },
+  session: {
+    cookieCache: {
+      enable: true,
+      strategy: 'jwt',
+      maxAge: 7*24*60*60,
+    }
+  },
+  plugins: [
+   jwt(),
+  ]
 });

@@ -1,6 +1,7 @@
 "use client";
 
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ShieldAlert, Users, Layers, TrendingUp, Edit2, Loader2, ArrowRight } from "lucide-react";
@@ -26,7 +27,7 @@ export default function AdminDashboardPage() {
         // Fetch stats if admin
         const fetchStats = async () => {
           try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/dashboard/stats`);
+            const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/dashboard/stats`);
             const data = await res.json();
             if (data.success) {
               setStats(data.data);

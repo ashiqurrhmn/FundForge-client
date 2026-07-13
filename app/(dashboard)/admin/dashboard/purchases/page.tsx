@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Loader2, CreditCard, Search, ShoppingBag } from "lucide-react";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { motion } from "framer-motion";
 
 export default function AdminPurchasesPage() {
@@ -13,7 +14,7 @@ export default function AdminPurchasesPage() {
   useEffect(() => {
     const fetchPurchases = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/purchases`);
+        const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/purchases`);
         const data = await res.json();
         if (data.success) {
           setPurchases(data.data);

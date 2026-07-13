@@ -6,6 +6,7 @@ import { DollarSign, Users, Eye, PlusCircle, ArrowRight, Clock, Star, TrendingUp
 import { useState, useEffect } from "react";
 import { ManageProfileModal } from "./manage-profile-modal";
 import { CampaignCardSkeleton } from "@/components/skeletons/campaign-card-skeleton";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -19,13 +20,13 @@ export function CreatorDashboard({ user }: { user: any }) {
     if (user?.email) {
       const fetchDashboardData = async () => {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/creator/dashboard/${user.email}`);
+          const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/creator/dashboard/${user.email}`);
           const data = await res.json();
           if (data.success) {
             setDashboardData(data.data);
             
             // Also fetch campaigns from existing endpoint for the list
-            const campaignRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/creator/${user.id}`);
+            const campaignRes = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/creator/${user.id}`);
             const campaignData = await campaignRes.json();
             if (campaignData.success) {
               setCampaigns(campaignData.data);

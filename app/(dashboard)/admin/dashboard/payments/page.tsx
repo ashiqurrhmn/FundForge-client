@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Loader2, ReceiptText, Search, CreditCard, ExternalLink } from "lucide-react";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
@@ -14,7 +15,7 @@ export default function AdminPaymentHistoryPage() {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/contributions`);
+        const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/contributions`);
         const data = await res.json();
         if (data.success) {
           setPayments(data.data);

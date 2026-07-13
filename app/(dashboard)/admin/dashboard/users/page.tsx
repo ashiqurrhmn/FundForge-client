@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { useRouter } from "next/navigation";
 import { Loader2, Search, Filter, Shield, Palette, User, Trash2, ArrowDownUp, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -89,7 +90,7 @@ export default function AdminUsersPage() {
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/admin`);
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/users/admin`);
       const data = await res.json();
       if (data.success) {
         setUsers(data.data);
@@ -110,7 +111,7 @@ export default function AdminUsersPage() {
 
     setProcessingId(id);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/admin/${id}/role`, {
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/users/admin/${id}/role`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +145,7 @@ export default function AdminUsersPage() {
 
     setProcessingId(id);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/admin/${id}`, {
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/users/admin/${id}`, {
         method: 'DELETE',
       });
       const data = await res.json();

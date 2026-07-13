@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { Loader2, ReceiptText, Clock, CheckCircle2, XCircle, Ban, Search } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -22,7 +23,7 @@ export default function PaymentHistoryPage() {
     if (session?.user?.email) {
       const fetchHistory = async () => {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/creator/${session.user.email}`);
+          const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/withdrawals/creator/${session.user.email}`);
           const data = await res.json();
           if (data.success) {
             setWithdrawals(data.data);

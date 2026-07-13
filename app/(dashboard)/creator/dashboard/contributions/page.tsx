@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { useRouter } from "next/navigation";
 import {
   Loader2,
@@ -72,7 +73,7 @@ export default function CreatorContributionsPage() {
   const fetchContributions = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}/api/contributions/creator/${encodeURIComponent(session!.user.email)}`
       );
       const data = await res.json();
@@ -93,7 +94,7 @@ export default function CreatorContributionsPage() {
     setProcessingId(contributionId);
     setConfirmAction(null);
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}/api/contributions/${contributionId}/status`,
         {
           method: "PATCH",

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { useRouter } from "next/navigation";
 import { Edit2, Trash2, Loader2, ArrowLeft, Settings, Clock, Users, Radio, Search, Filter, ArrowUpDown } from "lucide-react";
 import Link from "next/link";
@@ -50,7 +51,7 @@ export default function MyCampaignsPage() {
   const fetchCampaigns = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/creator/${session!.user.id}`);
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/creator/${session!.user.id}`);
       const data = await res.json();
       if (data.success) {
         setCampaigns(data.data);
@@ -80,7 +81,7 @@ export default function MyCampaignsPage() {
     if (!campaignToDelete) return;
     setIsDeleting(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/${campaignToDelete}`, {
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/${campaignToDelete}`, {
         method: "DELETE"
       });
       const data = await res.json();

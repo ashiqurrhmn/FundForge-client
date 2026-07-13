@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useSession } from "@/app/lib/auth-client";
+import { fetchWithAuth } from "@/app/lib/fetchWithAuth";
 import { useRouter } from "next/navigation";
 import { CheckCircle, XCircle, Loader2, ArrowLeft, Search, Filter, ArrowDownUp } from "lucide-react";
 import Link from "next/link";
@@ -98,7 +99,7 @@ export default function AdminCampaignsPage() {
   const fetchCampaigns = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/admin`);
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/admin`);
       const data = await res.json();
       if (data.success) {
         setCampaigns(data.data);
@@ -113,7 +114,7 @@ export default function AdminCampaignsPage() {
   const handleUpdateStatus = async (id: string, newStatus: string) => {
     setProcessingId(id);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/${id}/status`, {
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/${id}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus })
