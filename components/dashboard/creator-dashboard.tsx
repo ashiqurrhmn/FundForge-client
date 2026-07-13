@@ -309,7 +309,7 @@ export function CreatorDashboard({ user }: { user: any }) {
                   padding: '12px 16px'
                 }}
                 itemStyle={{ color: '#10b981', fontWeight: 900 }}
-                formatter={(value: number) => [`${value.toLocaleString()} Cr`, 'Raised']}
+                formatter={(value: any) => [`${value?.toLocaleString() || value} Cr`, 'Raised']}
               />
               <Area 
                 type="monotone" 
