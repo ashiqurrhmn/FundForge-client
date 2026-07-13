@@ -7,6 +7,7 @@ import { PageTransition } from "@/components/page-transition";
 import { ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FeaturedCarousel } from "@/components/featured-carousel";
+import { TestimonialSection } from "@/components/testimonial-section";
 
 const SLIDES = [
   {
@@ -277,6 +278,9 @@ export default function Home() {
       {campaigns.length > 0 && (
         <FeaturedCarousel campaigns={campaigns} />
       )}
+      
+      {/* Testimonials */}
+      <TestimonialSection />
     </PageTransition>
   );
 }
