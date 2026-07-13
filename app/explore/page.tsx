@@ -62,9 +62,10 @@ function ExploreContent() {
 
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get("search") || "";
+  const initialCategory = searchParams.get("category") || "All";
 
   const [localSearch, setLocalSearch] = useState(initialSearch);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [sortOption, setSortOption] = useState("newest");
 
   useEffect(() => {
@@ -72,6 +73,12 @@ function ExploreContent() {
       setLocalSearch(initialSearch);
     }
   }, [initialSearch]);
+
+  useEffect(() => {
+    if (initialCategory) {
+      setSelectedCategory(initialCategory);
+    }
+  }, [initialCategory]);
 
   useEffect(() => {
     setCurrentPage(1);

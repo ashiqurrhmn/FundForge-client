@@ -8,6 +8,9 @@ import { ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FeaturedCarousel } from "@/components/featured-carousel";
 import { TestimonialSection } from "@/components/testimonial-section";
+import { HowItWorksSection } from "@/components/how-it-works-section";
+import { CategoriesSection } from "@/components/categories-section";
+import { StatsSection } from "@/components/stats-section";
 
 const SLIDES = [
   {
@@ -71,6 +74,7 @@ const SLIDE_DURATION = 7000;
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [campaigns, setCampaigns] = useState([]);
+  const [allCampaigns, setAllCampaigns] = useState([]);
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -78,8 +82,9 @@ export default function Home() {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns`);
         const json = await res.json();
         if (json.success) {
+          setAllCampaigns(json.data);
           // Sort by raisedCredits and take top 5 for featured
-          const sorted = json.data.sort((a: any, b: any) => (b.raisedCredits || 0) - (a.raisedCredits || 0));
+          const sorted = [...json.data].sort((a: any, b: any) => (b.raisedCredits || 0) - (a.raisedCredits || 0));
           setCampaigns(sorted.slice(0, 5));
         }
       } catch (err) {
@@ -278,6 +283,15 @@ export default function Home() {
       {campaigns.length > 0 && (
         <FeaturedCarousel campaigns={campaigns} />
       )}
+      
+      {/* How It Works */}
+      <HowItWorksSection />
+      
+      {/* Categories */}
+      <CategoriesSection campaigns={allCampaigns} />
+      
+      {/* Stats */}
+      <StatsSection />
       
       {/* Testimonials */}
       <TestimonialSection />
