@@ -54,12 +54,8 @@ A **production-grade** crowdfunding platform with multi-role authentication, Str
 
 ## 📸 Screenshots
 
-*(Replace with actual screenshots of your application)*
+<img width="1254" height="1254" alt="fundforge" src="https://github.com/user-attachments/assets/ae172e9c-c479-49bf-b7de-1dbb00d4690e" />
 
-<div align="center">
-  <img src="https://via.placeholder.com/800x450/111111/FFFFFF?text=FundForge+Dashboard+Preview" alt="Dashboard Preview" width="100%" style="border-radius: 8px; margin-bottom: 10px;" />
-  <img src="https://via.placeholder.com/800x450/111111/FFFFFF?text=Campaign+Explorer+Preview" alt="Campaign Explorer" width="100%" style="border-radius: 8px;" />
-</div>
 
 ---
 
